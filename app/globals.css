@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Светлые поверхности */
+  --color-base: #ffffff;
+  --color-surface: #f6f7f9;
+  --color-surface-2: #eef1f5;
+  --color-line: #e3e8ee;
+  --color-line-strong: #ccd4de;
+
+  /* Тёмные вставки (подвал, CTA-полоса) */
+  --color-ink-900: #0f141a;
+  --color-ink-800: #161c24;
+  --color-ink-700: #1f2731;
+
+  /* Текст */
+  --color-head: #0f1419;
+  --color-body: #4c5866;
+  --color-soft: #7c8896;
+
+  /* Акцент */
+  --color-spark-50: #fff4ec;
+  --color-spark-100: #ffe2ce;
+  --color-spark-300: #ff9a52;
+  --color-spark-400: #ff7a29;
+  --color-spark-500: #ff6a13;
+  --color-spark-600: #d9500a;
+  --color-spark-700: #b84300;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-display), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-base);
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-spark-500);
+  color: #fff;
+}
+
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+}
+
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+/* Технический фон-сетка */
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(15, 20, 25, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 20, 25, 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Диагональная «предупреждающая» лента: оранжевый по графиту */
+@utility hazard {
+  background-color: var(--color-ink-800);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-spark-500) 0 14px,
+    transparent 14px 28px
+  );
+}
+
+/* Та же лента, но прозрачными промежутками — для тёмных блоков */
+@utility hazard-open {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-spark-500) 0 14px,
+    transparent 14px 28px
+  );
+}
+
+@utility card {
+  background-color: var(--color-base);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 1px 2px rgba(15, 20, 25, 0.04);
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility rise {
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
