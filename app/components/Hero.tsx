@@ -4,7 +4,6 @@ import Icon from "./Icon";
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
-      {/* фон */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-spark-50 via-base to-base" />
         <div className="grid-bg absolute inset-0 [mask-image:radial-gradient(120%_80%_at_50%_0%,#000_10%,transparent_75%)]" />
@@ -79,23 +78,22 @@ export default function Hero() {
                   {capabilities.map((c) => (
                     <div
                       key={c.label}
-                      className="flex items-baseline justify-between gap-4 py-4 first:pt-0 last:pb-0"
+                      className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
                     >
-                      <div>
-                        <dt className="font-semibold text-head">{c.label}</dt>
-                        <p className="mt-0.5 text-xs text-soft">{c.note}</p>
+                      <div className="max-w-[200px]">
+                        <dt className="font-semibold text-head ">{c.label}</dt>
                       </div>
-                      <dd className="display shrink-0 text-right text-lg normal-case text-spark-600">
-                        {c.value}
-                      </dd>
+                      <div className="flex flex-col items-end">
+                        <dd className="display shrink-0 text-right text-lg normal-case text-spark-600">
+                          {c.value}
+                        </dd>
+                        <div className="max-w-[200px] text-right">
+                          <p className="mt-0.5 text-xs text-soft">{c.note}</p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </dl>
-              </div>
-              <div className="flex items-center gap-3 border-t border-line bg-surface px-6 py-4 text-sm text-body">
-                <Icon name="factory" className="size-5 shrink-0 text-spark-600" />
-                Собственные производственные площади: раскрой, гибка,
-                механообработка, сварка, сборка.
               </div>
             </div>
           </div>
