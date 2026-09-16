@@ -31,11 +31,6 @@
   --font-display: var(--font-display), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
-}
-
 body {
   background-color: var(--color-base);
   color: var(--color-body);
@@ -112,9 +107,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {

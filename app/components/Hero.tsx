@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { capabilities, company } from "../company";
 import Icon from "./Icon";
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-spark-50 via-base to-base" />
         <div className="grid-bg absolute inset-0 [mask-image:radial-gradient(120%_80%_at_50%_0%,#000_10%,transparent_75%)]" />
@@ -20,43 +21,44 @@ export default function Hero() {
             </p>
 
             <h1 className="display text-[clamp(1.9rem,7.2vw,3.65rem)] break-words text-head">
-              Металлообработка
-              <br />и сварные
+              Механическая
               <br />
-              <span className="text-spark-600">металлоконструкции</span>
+              обработка металла
+              <br />
+              <span className="text-spark-600">по вашим чертежам</span>
             </h1>
 
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-body">
-              Изготавливаем детали по вашим чертежам, сварные конструкции из
-              нержавеющей и чёрной стали, а также нестандартное оборудование —
-              шнеки, ёмкости, транспортёры. Нет чертежа — разработаем сами.
+              Точим и фрезеруем детали с точностью до 0,01 мм — включая валы
+              длиной до двух метров. Закалка, раскрой и сварка выполняются на той
+              же площадке, поэтому деталь не ездит между подрядчиками.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="#request"
+              <Link
+                href="/kontakty"
                 className="group inline-flex items-center justify-center gap-2.5 rounded-sm bg-spark-600 px-7 py-4 font-semibold text-white shadow-[0_14px_34px_-14px_var(--color-spark-600)] transition-colors hover:bg-spark-700"
               >
-                Получить бесплатный расчёт
+                Прислать чертёж на расчёт
                 <Icon
                   name="arrow"
                   className="size-4 transition-transform group-hover:translate-x-1"
                 />
-              </a>
-              <a
-                href={company.phoneHref}
+              </Link>
+              <Link
+                href="/proizvodstvo"
                 className="inline-flex items-center justify-center gap-2.5 rounded-sm border border-line-strong bg-base px-7 py-4 font-semibold text-head transition-colors hover:border-spark-300 hover:bg-spark-50"
               >
-                <Icon name="phone" className="size-4 text-spark-600" />
-                {company.phone}
-              </a>
+                <Icon name="factory" className="size-4 text-spark-600" />
+                Производственные возможности
+              </Link>
             </div>
 
             <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-body">
               {[
-                "Работаем по чертежу и по эскизу",
-                "Единичные заказы и серии",
-                "Расчёт — бесплатно",
+                "Точность до 0,01 мм",
+                "Закалка до 250 кг на своей площадке",
+                "Единичные детали и серии",
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Icon name="check" className="size-4 shrink-0 text-spark-600" />
@@ -94,6 +96,13 @@ export default function Hero() {
                     </div>
                   ))}
                 </dl>
+                <Link
+                  href="/proizvodstvo"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-spark-700 hover:text-spark-600"
+                >
+                  Габариты по участкам
+                  <Icon name="arrow" className="size-4" />
+                </Link>
               </div>
             </div>
           </div>

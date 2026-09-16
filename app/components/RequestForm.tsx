@@ -1,13 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { company, services } from "../company";
+import { company } from "../company";
+import { contentPages } from "../content/pages";
 import Icon from "./Icon";
 
 const fieldClass =
   "w-full rounded-sm border border-line-strong bg-base px-4 py-3.5 text-head placeholder:text-soft outline-none transition-colors focus:border-spark-500 focus:ring-2 focus:ring-spark-100";
 
-export default function RequestForm() {
+export default function RequestForm({
+  defaultTopic = "",
+}: {
+  /** Направление, выбранное заранее — со страницы услуги или изделия. */
+  defaultTopic?: string;
+}) {
   const [sent, setSent] = useState(false);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -112,11 +118,11 @@ export default function RequestForm() {
               <span className="mb-2 block text-sm font-medium text-body">
                 Что нужно сделать
               </span>
-              <select name="topic" defaultValue="" className={fieldClass}>
+              <select name="topic" defaultValue={defaultTopic} className={fieldClass}>
                 <option value="">Выберите направление</option>
-                {services.map((s) => (
-                  <option key={s.id} value={s.title}>
-                    {s.title}
+                {contentPages.map((p) => (
+                  <option key={`${p.group}/${p.slug}`} value={p.navLabel}>
+                    {p.navLabel}
                   </option>
                 ))}
                 <option value="Другое">Другое</option>

@@ -1,0 +1,667 @@
+<title>Карта спроса Велдинг Тайм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#EDEFF1; --surface:#FFFFFF; --surface-2:#E4E8EB; --inset:#F5F7F8;
+  --ink:#101418; --ink-2:#4B565F; --ink-3:#7C8994;
+  --rule:#C9D1D6; --rule-soft:#DDE3E7;
+  --arc:#0C63C4; --arc-tint:#E2EDFA;
+  --hot:#B0470C; --hot-tint:#F8E7DB;
+  --ok:#1F6B4F; --ok-tint:#DDEDE4;
+  --slate:#5C6B76; --slate-tint:#E1E6E9;
+  --display:"Oswald","Arial Narrow",sans-serif;
+  --body:"Golos Text","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1316; --surface:#171C20; --surface-2:#1E252B; --inset:#131A1F;
+    --ink:#E9EEF2; --ink-2:#9BA8B2; --ink-3:#6C7A85;
+    --rule:#2A333A; --rule-soft:#222A30;
+    --arc:#6BADF7; --arc-tint:#132536;
+    --hot:#F09452; --hot-tint:#2D1C11;
+    --ok:#6FC79E; --ok-tint:#132520;
+    --slate:#8D9BA6; --slate-tint:#1E252B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1316; --surface:#171C20; --surface-2:#1E252B; --inset:#131A1F;
+  --ink:#E9EEF2; --ink-2:#9BA8B2; --ink-3:#6C7A85;
+  --rule:#2A333A; --rule-soft:#222A30;
+  --arc:#6BADF7; --arc-tint:#132536;
+  --hot:#F09452; --hot-tint:#2D1C11;
+  --ok:#6FC79E; --ok-tint:#132520;
+  --slate:#8D9BA6; --slate-tint:#1E252B;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1200px; margin:0 auto; padding:0 24px 96px}
+
+.mast{border-bottom:2px solid var(--ink); padding:40px 0 20px; margin-bottom:40px}
+.mast .kicker{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); display:flex; flex-wrap:wrap; gap:10px 18px; margin-bottom:22px;
+}
+.mast h1{
+  font-family:var(--display); font-weight:600; font-size:clamp(34px,5.4vw,56px);
+  line-height:1.02; letter-spacing:-.01em; margin:0 0 14px; text-wrap:balance;
+}
+.mast .lede{font-size:17.5px; color:var(--ink-2); max-width:64ch; margin:0}
+.mast .lede b{color:var(--ink); font-weight:600}
+
+.cols{display:block}
+@media (min-width:1040px){
+  .cols{display:grid; grid-template-columns:200px minmax(0,1fr); gap:56px; align-items:start}
+  .rail{position:sticky; top:28px}
+}
+.rail ol{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-direction:column; gap:1px;
+  font-family:var(--mono); font-size:12px; line-height:1.35;
+}
+.rail a{
+  display:flex; gap:9px; padding:7px 8px; text-decoration:none;
+  color:var(--ink-2); border-left:2px solid var(--rule-soft);
+}
+.rail a:hover,.rail a:focus-visible{color:var(--ink); background:var(--surface); border-left-color:var(--arc); outline:none}
+.rail .n{color:var(--ink-3)}
+.rail .lbl{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); padding:0 8px 10px; border-left:2px solid transparent}
+
+main{display:flex; flex-direction:column; gap:52px; min-width:0}
+section{display:flex; flex-direction:column; gap:16px; scroll-margin-top:24px}
+h2{
+  font-family:var(--display); font-weight:500; font-size:clamp(23px,2.6vw,30px);
+  line-height:1.16; margin:0; letter-spacing:-.005em; text-wrap:balance;
+  padding-bottom:12px; border-bottom:1px solid var(--rule);
+}
+h2 .num{
+  font-family:var(--mono); font-size:12px; font-weight:500; color:var(--arc);
+  display:block; letter-spacing:.12em; margin-bottom:7px;
+}
+h3{
+  font-family:var(--display); font-weight:500; font-size:19px; line-height:1.25;
+  margin:14px 0 0; letter-spacing:.005em;
+}
+p{margin:0; max-width:68ch}
+ul.bul{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:7px; max-width:68ch}
+ul.bul li::marker{color:var(--arc)}
+strong{font-weight:600}
+em{font-style:normal; font-family:var(--mono); font-size:.92em; color:var(--ink-2)}
+a{color:var(--arc)}
+
+.note{
+  background:var(--surface); border:1px solid var(--rule-soft); border-left:3px solid var(--arc);
+  padding:16px 18px; display:flex; flex-direction:column; gap:8px;
+}
+.note.warn{border-left-color:var(--hot)}
+.note.good{border-left-color:var(--ok)}
+.note .t{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.note p{max-width:none}
+
+.tscroll{overflow-x:auto; border:1px solid var(--rule-soft); background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:660px; font-size:14px}
+caption{
+  text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); padding:0 0 8px;
+}
+th{
+  text-align:left; font-family:var(--mono); font-weight:500; font-size:10.5px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  padding:11px 14px; border-bottom:1px solid var(--rule); background:var(--inset);
+  white-space:nowrap; vertical-align:bottom;
+}
+td{padding:11px 14px; border-bottom:1px solid var(--rule-soft); vertical-align:top; line-height:1.45}
+tbody tr:last-child td{border-bottom:none}
+td.q{font-weight:500; min-width:215px}
+td.q span{display:block; font-weight:400; font-size:12.5px; color:var(--ink-3); font-family:var(--mono); line-height:1.4; margin-top:3px}
+td.pg{font-family:var(--mono); font-size:12px; color:var(--ink-2); white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.meter{display:inline-flex; gap:2px; vertical-align:middle}
+.meter i{width:7px; height:13px; background:var(--rule); display:block}
+.meter.f3 i:nth-child(-n+3){background:var(--hot)}
+.meter.f2 i:nth-child(-n+2){background:var(--arc)}
+.meter.f1 i:nth-child(-n+1){background:var(--slate)}
+
+.chip{
+  display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; padding:3px 7px; white-space:nowrap; font-weight:500;
+}
+.chip.hi,.chip.w1{background:var(--hot-tint); color:var(--hot)}
+.chip.mid,.chip.w2{background:var(--arc-tint); color:var(--arc)}
+.chip.low,.chip.w3{background:var(--slate-tint); color:var(--slate)}
+.chip.ok{background:var(--ok-tint); color:var(--ok)}
+
+.grid2{display:grid; gap:14px; grid-template-columns:1fr}
+@media (min-width:720px){.grid2{grid-template-columns:1fr 1fr}}
+.card{
+  background:var(--surface); border:1px solid var(--rule-soft); padding:18px;
+  display:flex; flex-direction:column; gap:9px;
+}
+.card.lead{border-left:3px solid var(--ok)}
+.card .h{font-family:var(--display); font-weight:500; font-size:17px; line-height:1.2}
+.card .m{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.card p{font-size:14.5px; color:var(--ink-2); max-width:none}
+.card .big{font-family:var(--display); font-size:26px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums}
+
+.legend{
+  display:flex; flex-wrap:wrap; gap:10px 26px; padding:14px 16px;
+  background:var(--surface-2); font-family:var(--mono); font-size:11.5px; color:var(--ink-2);
+  align-items:center;
+}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+
+footer{
+  margin-top:64px; padding-top:22px; border-top:1px solid var(--rule);
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  display:flex; flex-direction:column; gap:8px;
+}
+footer ul{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px}
+footer a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+footer a:hover{color:var(--arc)}
+:focus-visible{outline:2px solid var(--arc); outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">
+    <span>ООО «Велдинг Тайм» · Новополоцк</span>
+    <span>Редакция 2 · сентябрь 2026</span>
+    <span>Ядро: механообработка</span>
+  </div>
+  <h1>Карта спроса на металлообработку</h1>
+  <p class="lede">Редакция 2 учитывает две поправки от производства: достоверны только <b>«Производственные возможности»</b>, остальной текст лендинга сгенерирован и требует проверки; настоящая сила предприятия — <b>токарная и фрезерная обработка</b>. Приоритеты кластеров и порядок страниц ниже пересобраны под это, а спорные утверждения помечены как требующие подтверждения.</p>
+</header>
+
+<div class="cols">
+  <nav class="rail" aria-label="Содержание">
+    <div class="lbl">Содержание</div>
+    <ol>
+      <li><a href="#trust"><span class="n">01</span><span>Достоверность данных</span></a></li>
+      <li><a href="#pos"><span class="n">02</span><span>Позиционирование</span></a></li>
+      <li><a href="#geo"><span class="n">03</span><span>География спроса</span></a></li>
+      <li><a href="#intent"><span class="n">04</span><span>Типы интентов</span></a></li>
+      <li><a href="#clusters"><span class="n">05</span><span>Кластеры</span></a></li>
+      <li><a href="#comp"><span class="n">06</span><span>Конкуренты</span></a></li>
+      <li><a href="#content"><span class="n">07</span><span>Требования к странице</span></a></li>
+      <li><a href="#arch"><span class="n">08</span><span>Архитектура страниц</span></a></li>
+      <li><a href="#waves"><span class="n">09</span><span>Порядок работ</span></a></li>
+      <li><a href="#ask"><span class="n">10</span><span>Что уточнить в цехе</span></a></li>
+      <li><a href="#verify"><span class="n">11</span><span>Что снять в Wordstat</span></a></li>
+      <li><a href="#risk"><span class="n">12</span><span>Риски</span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <section id="trust">
+    <h2><span class="num">01 / ДАННЫЕ</span>Что достоверно, а что придумано</h2>
+    <p>Это первое, что нужно зафиксировать: писать страницы услуг по сгенерированному тексту нельзя. Любая цифра или компетенция на странице — это публичное обещание, по которому придёт снабженец с чертежом. Ниже разделение по источнику.</p>
+    <div class="tscroll">
+      <table>
+        <caption>Статус утверждений из текущего лендинга</caption>
+        <thead><tr><th>Утверждение</th><th>Источник</th><th>Статус</th></tr></thead>
+        <tbody>
+          <tr><td class="q">Лазерная резка до 20 мм, плазменная до 60 мм, поле 1500×6000</td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Токарно-фрезерная обработка, точность до 0,01 мм<span>габариты 1200×600×140, 450×300, 300×2000</span></td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Вальцовка и гибка листа до 2500 мм, толщина до 20 мм</td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Термообработка и закалка до 250 кг, печь 2000×750×750</td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Сварка чёрной и нержавеющей стали, действующие сертификаты</td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Шнеки, ёмкости, транспортёры, ремонт нестандартного оборудования</td><td>Производственные возможности</td><td><span class="chip ok">подтверждено</span></td></tr>
+          <tr><td class="q">Рубка на гильотине</td><td>Сгенерированный блок услуг</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Наплавка и восстановление деталей</td><td>Сгенерированный блок услуг</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Разработка чертежей и КД по эскизу или образцу</td><td>Сгенерированный блок услуг и FAQ</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Монтаж на объекте, пусконаладочные работы</td><td>Сгенерированный блок услуг</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Обечайки и царги, бункеры и воронки, лестницы и ограждения</td><td>Сгенерированный список изделий</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Закупка материала, работа с давальческим</td><td>Сгенерированный текст</td><td><span class="chip hi">проверить</span></td></tr>
+          <tr><td class="q">Расчёт в течение рабочего дня, бесплатный расчёт</td><td>Сгенерированный FAQ</td><td><span class="chip hi">проверить</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Практический вывод: <strong>волна 1 строится только на подтверждённой части</strong>. Всё, что помечено «проверить», уходит в волну 3 и ждёт ответов из §10 — либо выбрасывается. Обратите внимание, что «работаем без чертежа» — одно из самых сильных конверсионных обещаний на текущем лендинге, и оно как раз в непроверенной половине.</p>
+    <div class="note warn">
+      <div class="t">Про частоты запросов</div>
+      <p>Точных цифр из Wordstat и Keyword Planner здесь по-прежнему нет: они требуют авторизации. Частотные тиры оценочные — выведены из плотности выдачи, наличия платной рекламы и числа выделенных страниц у конкурентов. Для порядка работ этого достаточно, перед рекламным бюджетом цифры нужно снять по §11.</p>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><span class="meter f3"><i></i><i></i><i></i></span> высокая частота</span>
+      <span><span class="meter f2"><i></i><i></i><i></i></span> средняя</span>
+      <span><span class="meter f1"><i></i><i></i><i></i></span> низкая / микро-ниша</span>
+      <span><span class="chip hi">высокий</span> приоритет</span>
+      <span><span class="chip mid">средний</span></span>
+      <span><span class="chip low">низкий</span></span>
+    </div>
+  </section>
+
+  <section id="pos">
+    <h2><span class="num">02 / ПОЗИЦИОНИРОВАНИЕ</span>Механообработка плюс своя термичка</h2>
+    <p>Если ядро — токарка и фрезеровка, то «полный цикл металлообработки» как главное сообщение работает против вас: это самая размытая и самая конкурентная формулировка на рынке, по ней вы выглядите как ещё один цех из сотни. Из подтверждённых возможностей складывается куда более узкое и защищённое утверждение.</p>
+    <div class="grid2">
+      <div class="card lead">
+        <div class="m">Отличие 1 · длина детали</div>
+        <div class="big">300 × 2000 мм</div>
+        <p>Токарный станок под деталь длиной до 2 метров при диаметре до 300 мм. Длинные валы — признанно трудная задача: большинство цехов уверенно работает до 1 метра. Белорусская выдача по «изготовлению валов» почти пустая, её занимают российские сайты.</p>
+      </div>
+      <div class="card lead">
+        <div class="m">Отличие 2 · термичка на месте</div>
+        <div class="big">250 кг</div>
+        <p>Печь 2000×750×750 под закалку и отжиг до 250 кг. Для сравнения, минский iremtech публикует объёмную закалку в поле 1100×600×400 при максимуме 25 кг. Разница по массе — на порядок, и печь по длине совпадает с токарным станком: деталь 2 м можно и выточить, и закалить, не отправляя её подрядчику.</p>
+      </div>
+      <div class="card lead">
+        <div class="m">Отличие 3 · точность</div>
+        <div class="big">0,01 мм</div>
+        <p>Заявленная точность на порядок выше типовой для универсальных цехов. Это ключ к запросам «высокоточная обработка», «прецизионные детали», «детали для оборудования» — то есть к промышленному заказчику, а не к разовой калитке.</p>
+      </div>
+      <div class="card">
+        <div class="m">Что из этого следует</div>
+        <div class="h">Сообщение сайта</div>
+        <p>Не «делаем всё из металла», а «механообработка по чертежам с точностью 0,01 мм, включая валы до 2 м, с закалкой на своей площадке». Раскрой, гибка и сварка при этом остаются на сайте — но как обеспечение основного производства и как отдельные высокочастотные входы, а не как главный посыл.</p>
+      </div>
+    </div>
+    <div class="note good">
+      <div class="t">Связка, которой нет у конкурентов</div>
+      <p>Механообработка и термообработка почти всегда разнесены по разным предприятиям: цех точит, потом деталь едет в термичку, потом обратно. Каждое плечо — это логистика, сроки и риск повести деталь. «Точение и фрезеровка + закалка на одной площадке» — утверждение, подтверждённое вашими же возможностями, и именно оно должно стоять в H1 главной страницы и в разделе о производстве.</p>
+    </div>
+  </section>
+
+  <section id="geo">
+    <h2><span class="num">03 / ГЕОГРАФИЯ</span>Спрос живёт в Минске, деньги — в области</h2>
+    <p>Поисковый спрос концентрируется в Минске. По Новополоцку и Полоцку частоты микроскопические, а выдачу занимают гео-шаблоны агрегаторов (<em>will.by/novopolock/…</em>, <em>novopolotsk.steelpoint.by</em>, <em>flagma.by/products/novopolock/</em>) — страницы «услуга × город» без реального производства в городе.</p>
+    <p>Для механообработки это даже удобнее, чем для раскроя. Деталь весом несколько килограммов едет по стране транспортной компанией за день, и заказчик это понимает: по запросам «изготовление деталей по чертежам» и «изготовление валов» он ищет исполнителя по Беларуси, а не рядом с домом. Лист 6 метров так не отправишь — поэтому кластеры раскроя гораздо жёстче привязаны к Минску, чем ваше ядро.</p>
+    <div class="grid2">
+      <div class="card">
+        <div class="m">Гео-воронка</div>
+        <div class="h">Витебская область: узко, но почти пусто</div>
+        <p>Новополоцк, Полоцк, Витебск — дешёвый и слабо занятый трафик, но очень небольшой. Закрывается 3–4 честными страницами плюс карточками в Яндекс и Google Картах. Не приоритет.</p>
+      </div>
+      <div class="card">
+        <div class="m">Промышленный контекст</div>
+        <div class="h">Нефтехимия и агро рядом с площадкой</div>
+        <p>Нафтан, Полимир, стекловолокно, агро и деревообработка по области — это заказчик на изготовление запчастей, восстановление и нестандартные детали. Значимая часть таких закупок идёт через <em>icetrade.by</em> и прямые запросы КП, поэтому страницы услуг должны быть пригодны для отправки ссылкой снабженцу: парк станков, габариты, сертификаты, кейсы.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="intent">
+    <h2><span class="num">04 / ИНТЕНТЫ</span>Пять способов, которыми вас ищут</h2>
+    <p>Разные формулировки — разные стадии решения и разные страницы. Смешивать их на одной странице значит не ранжироваться ни по одной. Для механообработки решающими оказываются второй и четвёртый типы.</p>
+    <div class="tscroll">
+      <table>
+        <caption>Типы поисковых интентов</caption>
+        <thead><tr><th>Тип</th><th>Как выглядит</th><th>Кто это</th><th>Что нужно за страницу</th></tr></thead>
+        <tbody>
+          <tr><td class="q">Операция + гео</td><td>«токарные работы Минск», «фрезерные работы по металлу»</td><td>Сравнивает цеха, часто разовая задача</td><td>Страница услуги с парком станков и габаритами</td></tr>
+          <tr><td class="q">Деталь / изделие</td><td>«изготовление валов по чертежам», «изготовление втулок», «шнек по чертежу»</td><td>Технолог или главный инженер с конкретной позицией</td><td>Страница детали: типы, габариты, материалы, точность, фото</td></tr>
+          <tr><td class="q">Материал + операция</td><td>«токарная обработка нержавейки», «сварка нержавеющей стали»</td><td>Знает требование к материалу, боится, что не возьмут</td><td>Подраздел материала внутри услуги</td></tr>
+          <tr><td class="q">Проблема / замена</td><td>«изготовление запчастей для оборудования», «деталь по образцу», «ремонт шнека»</td><td>Производство со стоящей линией — срочно, цена вторична</td><td>Страница с акцентом на срок и работу по образцу</td></tr>
+          <tr><td class="q">Информационный</td><td>«какая точность у токарного станка», «когда нужна закалка», «Ст3 или 09Г2С»</td><td>Проектировщик на этапе решения</td><td>Статья, ведущая на нужную услугу</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <div class="t">Ключевое наблюдение</div>
+      <p>Текущий лендинг написан почти целиком под первый тип и под один город. Типы 2 и 4 — где меньше всего конкурентов, выше чек и где как раз живёт механообработка — представлены строкой в списке услуг. Это и есть главная упущенная выручка.</p>
+    </div>
+  </section>
+
+  <section id="clusters">
+    <h2><span class="num">05 / КЛАСТЕРЫ</span>Кластеры спроса по приоритету</h2>
+    <p>Порядок кластеров пересобран: первыми идут те, что опираются на ядро и на подтверждённые возможности. Под ядром серым — хвосты, которые та же страница собирает без отдельных URL. Гео-модификаторы (Минск, Витебск, Новополоцк, Полоцк, Орша, Могилёв, Гомель, Брест, Гродно, Беларусь, РБ) применимы почти к каждой строке и не дублируются.</p>
+
+    <h3>1. Токарная обработка <span class="chip ok">ядро</span></h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">токарные работы<span>+ цена, на заказ, по чертежам, срочно</span></td><td><span class="meter f3"><i></i><i></i><i></i></span></td><td>Высокая: есть сайты целиком под запрос — tokarka-pro.by, mehobrabotka.by</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/tokarnye-raboty</td></tr>
+          <tr><td class="q">токарная обработка металла<span>+ обработка деталей, токарные работы ЧПУ</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Высокая</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/tokarnye-raboty</td></tr>
+          <tr><td class="q">изготовление валов на заказ<span>+ вал по чертежу, длинный вал, обточка вала, проточка</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Очень низкая в РБ: выдачу занимают российские сайты</td><td><span class="chip hi">высокий</span></td><td class="pg">/izdeliya/valy</td></tr>
+          <tr><td class="q">изготовление втулок, фланцев, шкивов<span>+ проставки, оси, переходники, гильзы</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая</td><td><span class="chip mid">средний</span></td><td class="pg">/izdeliya/detali-po-chertezham</td></tr>
+          <tr><td class="q">расточка отверстий, нарезка резьбы<span>+ расточка под ремонтный размер, торцовка</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, интент ремонтный</td><td><span class="chip mid">средний</span></td><td class="pg">блок в услуге</td></tr>
+          <tr><td class="q">высокоточная обработка металла<span>+ прецизионные детали, точность 0,01 мм</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, отсекает частников</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/mehobrabotka</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Ядро кластера частотное и конкурентное, но выигрывается не текстом, а цифрами: РМЦ 2000 мм, диаметр до 300, точность 0,01 мм. У большинства сайтов конкурентов в этом кластере вообще нет параметров станков — только слово «качественно». Отдельная страница под валы обязательна: это самый пустой подкластер со взрослым заказчиком.</p>
+
+    <h3>2. Фрезерная обработка <span class="chip ok">ядро</span></h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">фрезерные работы по металлу<span>+ фрезеровка, цена, на заказ</span></td><td><span class="meter f3"><i></i><i></i><i></i></span></td><td>Высокая</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/frezernye-raboty</td></tr>
+          <tr><td class="q">фрезеровка по чертежу заказчика<span>+ фрезерная обработка деталей, обработка плит</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя, интент целевой</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/frezernye-raboty</td></tr>
+          <tr><td class="q">фрезеровка шпоночных пазов<span>+ пазы, лыски, шлицы, окна в детали</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Очень низкая</td><td><span class="chip mid">средний</span></td><td class="pg">блок в услуге</td></tr>
+          <tr><td class="q">обработка корпусных деталей<span>+ плиты, кронштейны, посадочные места</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/frezernye-raboty</td></tr>
+          <tr><td class="q">токарно-фрезерные работы<span>+ комплексная механообработка, механическая обработка металла</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Высокая, запрос-хаб</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/mehobrabotka</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Здесь ключевая цифра — поле 1200×600×140. Оно заметно больше, чем у типового цеха с настольным оборудованием, и это стоит вынести в Title: заказчик с крупной плитой ищет именно того, кто её физически примет.</p>
+
+    <h3>3. Детали и запчасти по чертежам <span class="chip ok">ядро</span></h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">изготовление деталей по чертежам<span>+ по чертежам заказчика, единичные детали, мелкая серия</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя: intateh.by, kepalas.by, ctb.by</td><td><span class="chip hi">высокий</span></td><td class="pg">/izdeliya/detali-po-chertezham</td></tr>
+          <tr><td class="q">изготовление запчастей для оборудования<span>+ запчасти по образцу, нестандартные запчасти, деталь взамен вышедшей из строя</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя: valimet.by, belkran.com</td><td><span class="chip hi">высокий</span></td><td class="pg">/izdeliya/zapchasti</td></tr>
+          <tr><td class="q">изготовление детали по образцу<span>+ по фото, по старой детали, реверс-инжиниринг</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, конкуренты обещают срок до 2 недель</td><td><span class="chip hi">высокий</span></td><td class="pg">/izdeliya/zapchasti</td></tr>
+          <tr><td class="q">шестерни, звёздочки, зубчатые колёса<span>+ венцы, муфты, роликовые опоры</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Самый близкий к деньгам кластер для механообработки: у заказчика встала линия, оригинальной запчасти нет или её ждать три месяца. Здесь важнее срока даже не цена, а готовность работать по образцу — но именно это утверждение на текущем лендинге непроверенное, см. §10.</p>
+
+    <h3>4. Термообработка и закалка <span class="chip ok">подтверждено</span></h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">термообработка металла<span>+ термическая обработка деталей, услуги термообработки</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Низкая: единицы игроков — iremtech.by, bvbalyans.by, mfg.by</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/termoobrabotka</td></tr>
+          <tr><td class="q">закалка деталей<span>+ объёмная закалка, закалка стали, закалка крупных деталей</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, и все конкуренты ограничены по массе</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/termoobrabotka</td></tr>
+          <tr><td class="q">отжиг, нормализация, отпуск<span>+ снятие напряжений после сварки</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Очень низкая</td><td><span class="chip mid">средний</span></td><td class="pg">блок в услуге</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Частоты низкие, но это лучшая страница по соотношению усилия к результату во всём проекте: конкурентов единицы, а ваш предел по массе на порядок выше публикуемого ими. Плюс страница работает как аргумент в основном кластере — «выточим и сразу закалим».</p>
+
+    <h3>5. Раскрой и резка</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">лазерная резка металла<span>+ цена, услуги, по чертежам, до 20 мм</span></td><td><span class="meter f3"><i></i><i></i><i></i></span></td><td>Очень высокая: 8+ минских сайтов с прайсами и рекламой</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/lazernaya-rezka</td></tr>
+          <tr><td class="q">плазменная резка металла<span>+ толстого металла, 60 мм, цена</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя: толщины 20–60 мм закрывают немногие</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/plazmennaya-rezka</td></tr>
+          <tr><td class="q">лазерная резка нержавейки<span>+ алюминия, оцинковки, листа, трубы</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Высокая, дробится по материалам</td><td><span class="chip low">низкий</span></td><td class="pg">подраздел услуги</td></tr>
+          <tr><td class="q">раскрой металла по чертежу<span>+ раскройные карты, детали из листа, большое поле 6 метров</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, интент тёплый</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/lazernaya-rezka</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Приоритет понижен относительно редакции 1. Кластер самый частотный, но и самый забитый, а к ядру он теперь относится как обеспечение. Играть стоит не в «лазерную резку вообще», а в плазму по толстому металлу и в поле 1500×6000 — минские сервисы в основном стоят на 1500×3000.</p>
+
+    <h3>6. Гибка и вальцовка</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">гибка металла<span>+ листового, на заказ, цена, до 2500 мм</span></td><td><span class="meter f3"><i></i><i></i><i></i></span></td><td>Высокая</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/gibka-metalla</td></tr>
+          <tr><td class="q">вальцовка листового металла<span>+ вальцовка металла, цена, услуги</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя: у большинства толщина до 5 мм, у вас до 20</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/valcovka</td></tr>
+          <tr><td class="q">изготовление обечаек<span>+ царга, конус из листа, гибка по радиусу</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая: выдачу частично занимают российские сайты</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>7. Сварка и металлоконструкции</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">изготовление металлоконструкций<span>+ на заказ, сварных, по чертежам, цена</span></td><td><span class="meter f3"><i></i><i></i><i></i></span></td><td>Высокая, много крупных производств</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/metallokonstrukcii</td></tr>
+          <tr><td class="q">сварка нержавеющей стали<span>+ аргонодуговая, сварка нержавейки на заказ</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя</td><td><span class="chip hi">высокий</span></td><td class="pg">/uslugi/svarka-nerzhavejki</td></tr>
+          <tr><td class="q">сварочные работы<span>+ по чертежам, услуги сварщика, сварка с сертификатом</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Высокая, много частников — но сертификаты есть у немногих</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/svarochnye-raboty</td></tr>
+          <tr><td class="q">монтаж металлоконструкций<span>+ сборка на объекте, шеф-монтаж</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Средняя</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8. Изделия и нестандартное оборудование</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">изготовление шнеков<span>+ шнек по чертежу, витки шнека, спираль, шнековый вал, ремонт шнека</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Низкая: 3–4 специализированных сайта на всю РБ</td><td><span class="chip hi">высокий</span></td><td class="pg">/izdeliya/shneki</td></tr>
+          <tr><td class="q">изготовление ёмкостей из нержавейки<span>+ бак, резервуар, пищевая ёмкость</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя</td><td><span class="chip mid">средний</span></td><td class="pg">/izdeliya/emkosti</td></tr>
+          <tr><td class="q">транспортёры и конвейеры на заказ<span>+ шнековый транспортёр, ленточный, цепной, рольганг</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Низкая–средняя</td><td><span class="chip mid">средний</span></td><td class="pg">/izdeliya/transportery</td></tr>
+          <tr><td class="q">изготовление нестандартного оборудования<span>+ по чертежам заказчика, нестандартные изделия из металла</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, чек высокий</td><td><span class="chip mid">средний</span></td><td class="pg">/izdeliya/nestandartnoe</td></tr>
+          <tr><td class="q">бункеры, воронки, течки<span>+ бункер для сыпучих, силос</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Комментарий.</strong> Шнеки, ёмкости и транспортёры прямо названы в «Производственных возможностях», поэтому остаются в работе. Шнеки держат высокий приоритет: конкурентов мало, и ремонт шнека — это срочный интент, который хорошо стыкуется с механообработкой (вал точите вы же).</p>
+
+    <h3>9. Материалы и ремонт</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Ядро</th><th>Част.</th><th>Конкуренция</th><th>Приор.</th><th>Целевая страница</th></tr></thead>
+        <tbody>
+          <tr><td class="q">обработка нержавеющей стали<span>+ токарная обработка нержавейки, изделия из нержавейки, AISI 304 / 321</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя</td><td><span class="chip mid">средний</span></td><td class="pg">/materialy/nerzhavejka</td></tr>
+          <tr><td class="q">ремонт промышленного оборудования<span>+ ремонт узлов, ремонт технологического оборудования</span></td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Средняя, выдача размытая</td><td><span class="chip mid">средний</span></td><td class="pg">/uslugi/remont-oborudovaniya</td></tr>
+          <tr><td class="q">восстановление деталей, наплавка<span>+ восстановление валов, ремонтные размеры</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Низкая, заказчик — действующее производство</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+          <tr><td class="q">разработка чертежей, КД<span>+ чертёж по образцу, деталь по эскизу</span></td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Почти нулевая</td><td><span class="chip low">проверить</span></td><td class="pg">зависит от §10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>10. Информационные запросы для блога</h3>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Тема</th><th>Част.</th><th>Зачем нужна</th><th>Приор.</th><th>Куда ведёт</th></tr></thead>
+        <tbody>
+          <tr><td class="q">какую точность реально даёт токарный станок</td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Запрос конструктора, оправдывает вашу цифру 0,01 мм</td><td><span class="chip mid">средний</span></td><td class="pg">токарка</td></tr>
+          <tr><td class="q">когда детали нужна закалка, а когда достаточно нормализации</td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Почти нет конкурентов, ведёт в пустой кластер</td><td><span class="chip hi">высокий</span></td><td class="pg">термообработка</td></tr>
+          <tr><td class="q">как заказать деталь, если чертежа нет</td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Массовое возражение мелкого заказчика</td><td><span class="chip low">проверить</span></td><td class="pg">запчасти</td></tr>
+          <tr><td class="q">лазер или плазма: что выбрать по толщине</td><td><span class="meter f2"><i></i><i></i><i></i></span></td><td>Массовый вопрос, показывает диапазон 20 / 60 мм</td><td><span class="chip mid">средний</span></td><td class="pg">резка</td></tr>
+          <tr><td class="q">Ст3, Ст45, 09Г2С, AISI 304 — что выбрать под деталь</td><td><span class="meter f1"><i></i><i></i><i></i></span></td><td>Доверие плюс материальный кластер</td><td><span class="chip low">низкий</span></td><td class="pg">материалы</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="comp">
+    <h2><span class="num">06 / КОНКУРЕНТЫ</span>Кто занимает выдачу по ядру</h2>
+    <p>Состав конкурентов для механообработки другой, чем для раскроя, — это важно, потому что в редакции 1 внимание было смещено на минские лазерные сервисы.</p>
+    <div class="grid2">
+      <div class="card lead">
+        <div class="m">Прямые по ядру</div>
+        <div class="h">Цеха механообработки</div>
+        <p>tokarka-pro.by, cncmetalworking.by, mehobrabotka.by, metalworking.by, frezertokar.by (Брест), promechanics.by. Сайты в основном простые, часто без параметров станков и без прайса. Обыгрываются конкретикой габаритов и точности.</p>
+      </div>
+      <div class="card lead">
+        <div class="m">Прямые по деталям</div>
+        <div class="h">Изготовители запчастей</div>
+        <p>valimet.by, intateh.by, kepalas.by, ctb.by, belkran.com. Уже продают «чертёж по образцу» и срок до двух недель. Это планка по обещаниям, которую нужно либо перебить сроком, либо не заявлять вовсе.</p>
+      </div>
+      <div class="card">
+        <div class="m">По термообработке</div>
+        <div class="h">Их всего несколько</div>
+        <p>iremtech.by (объёмная закалка 1100×600×400, до 25 кг), bvbalyans.by (металлотрейдер с услугой термички, публикует цену от 30 руб./кг), mfg.by (Витебск), moaz.by. Кластер практически свободен, и по массе детали вы сильно впереди.</p>
+      </div>
+      <div class="card">
+        <div class="m">По раскрою</div>
+        <div class="h">Плотная минская выдача</div>
+        <p>znmaster.by, metalway.by, namas-m.by, fklazerrezka.by, svl.by — открытые прайсы за метр погонный, страница на каждый материал. Здесь вы заходите только через плазму по толстому металлу и поле 6 метров.</p>
+      </div>
+      <div class="card">
+        <div class="m">Полный цикл</div>
+        <div class="h">Эталон структуры</div>
+        <p>pikkub.by (КУБ) — дерево услуг вплоть до «фрезеровка крупногабаритных деталей», metallstrim.by, aksvil.by, nerzhavejka24.by. Их таксономию стоит держать рядом как образец глубины, не копируя заявления о компетенциях.</p>
+      </div>
+      <div class="card">
+        <div class="m">Гео-агрегаторы</div>
+        <div class="h">Держат регионы</div>
+        <p>flagma.by, pulscen.by, will.by, steelpoint.by, gde.by. Генерируют «услуга × город» тысячами. Обыгрываются только фактурой: фото цеха, реальные габариты, сертификаты, кейсы.</p>
+      </div>
+    </div>
+    <div class="note good">
+      <div class="t">Где дыра у всех</div>
+      <p>Ни у одного из просмотренных сайтов нет связки «механообработка + закалка на своей площадке» с опубликованными габаритами и массой. Цеха молчат про термичку, термички не точат. Это и есть ваше свободное место.</p>
+    </div>
+  </section>
+
+  <section id="content">
+    <h2><span class="num">07 / СТРАНИЦА</span>Что выдача требует от страницы</h2>
+    <p>Топовые страницы в этих кластерах дают один и тот же набор элементов. Для механообработки список немного другой, чем для раскроя: цена уходит на второй план, на первый выходит парк станков.</p>
+    <ul class="bul">
+      <li><strong>Таблица парка станков.</strong> Тип, модель, габариты обработки, максимальный диаметр и длина, точность. Это главный элемент страницы механообработки и то, чего у конкурентов чаще всего нет. У вас данные для неё уже есть — 1200×600×140, 450×300, 300×2000, 0,01 мм.</li>
+      <li><strong>Габариты как заголовок.</strong> «Токарные работы» ничем не отличается от сотни таких же H1. «Токарные работы: валы до 2000 мм, диаметр до 300 мм» отличается сразу и отсекает нецелевые заявки.</li>
+      <li><strong>Материалы, с которыми работаете.</strong> Конструкционные и нержавеющие марки, что берёте в закалку. Это же точки входа по запросам «токарная обработка нержавейки».</li>
+      <li><strong>Порядок расчёта вместо прайса.</strong> В механообработке цена всегда индивидуальна, и рынок это принимает — в отличие от раскроя, где прайс за метр обязателен. Достаточно честно описать, как считается нормо-час и что влияет на стоимость, плюс минимальный заказ.</li>
+      <li><strong>Фото своих деталей.</strong> Для этого кластера — критично: заказчик оценивает уровень по виду готовой детали, следам обработки, качеству резьбы. Стоки читаются как отсутствие производства.</li>
+      <li><strong>Форма с приёмом файла чертежа.</strong> DWG / PDF / скан → расчёт. Без загрузки файла ломается основной путь заявки.</li>
+      <li><strong>Срок ответа и срок изготовления.</strong> Ставить только то, что производство подтвердит (см. §10) — это обещание, по которому вас будут проверять.</li>
+      <li><strong>Сертификаты по сварке.</strong> Обязательный блок для промышленного заказчика и тендерной проверки.</li>
+    </ul>
+  </section>
+
+  <section id="arch">
+    <h2><span class="num">08 / АРХИТЕКТУРА</span>Карта страниц</h2>
+    <p>Три раздела по логике интента: <em>/uslugi/</em> — операции, <em>/izdeliya/</em> — то, что получает заказчик, <em>/materialy/</em> и гео — уточняющие. Волна 1 целиком опирается на подтверждённые возможности; страницы со статусом «проверить» не пишутся до ответов из §10.</p>
+    <div class="note good">
+      <div class="t">Статус на 16 сентября 2026</div>
+      <p><strong>Сайт переведён из лендинга в многостраничник — 14 страниц.</strong> Волна 1 реализована полностью: 8 страниц направлений, разделы-хабы <em>/uslugi</em> и <em>/izdeliya</em>, а также <em>/proizvodstvo</em>, <em>/kak-rabotaem</em> и <em>/kontakty</em> — вместо прежних анкоров одной прокручиваемой страницы. Главная стала компактным входом: позиционирование на механообработке, подтверждённые цифры, сетка направлений и форма.</p>
+      <p>Сгенерированные блоки старого лендинга (<em>services</em>, <em>products</em>, <em>advantages</em>, <em>steps</em>, <em>faq</em>, <em>materials</em>) удалены из проекта и заменены проверенными версиями в <em>app/content/site.ts</em>; в <em>app/company.ts</em> остались только контакты, меню и подтверждённый блок <em>capabilities</em>. Допущения по распределению габаритов по станкам вынесены в <em>app/content/production.ts</em> и правятся в одном месте. Есть sitemap.xml, robots.txt и микроразметка Service + BreadcrumbList + FAQPage. Волны 2 и 3 ждут ответов из §10.</p>
+    </div>
+    <div class="tscroll">
+      <table>
+        <caption>Целевая структура · 25 страниц</caption>
+        <thead><tr><th>URL</th><th>H1</th><th>Кластер</th><th>Волна</th></tr></thead>
+        <tbody>
+          <tr><td class="pg">/uslugi/mehobrabotka</td><td>Механическая обработка металла с точностью 0,01 мм</td><td class="num">1 · 2</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/uslugi/tokarnye-raboty</td><td>Токарные работы: валы до 2000 мм, диаметр до 300 мм</td><td class="num">1</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/uslugi/frezernye-raboty</td><td>Фрезерные работы: детали до 1200×600×140 мм</td><td class="num">2</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/izdeliya/valy</td><td>Изготовление валов по чертежам до 2 метров</td><td class="num">1</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/izdeliya/detali-po-chertezham</td><td>Изготовление деталей по чертежам заказчика</td><td class="num">3</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/izdeliya/zapchasti</td><td>Изготовление запчастей для промышленного оборудования</td><td class="num">3</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/uslugi/termoobrabotka</td><td>Термообработка и закалка деталей до 250 кг</td><td class="num">4</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/izdeliya/shneki</td><td>Изготовление и ремонт шнеков</td><td class="num">8</td><td><span class="chip w1">1</span></td></tr>
+          <tr><td class="pg">/uslugi/plazmennaya-rezka</td><td>Плазменная резка металла до 60 мм</td><td class="num">5</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/lazernaya-rezka</td><td>Лазерная резка металла до 20 мм, поле 1500×6000</td><td class="num">5</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/valcovka</td><td>Вальцовка листа толщиной до 20 мм</td><td class="num">6</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/gibka-metalla</td><td>Гибка листового металла до 2500 мм</td><td class="num">6</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/svarka-nerzhavejki</td><td>Сварка нержавеющей стали</td><td class="num">7</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/metallokonstrukcii</td><td>Изготовление сварных металлоконструкций</td><td class="num">7</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/izdeliya/emkosti</td><td>Ёмкости, баки и резервуары на заказ</td><td class="num">8</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/izdeliya/transportery</td><td>Транспортёры и конвейеры на заказ</td><td class="num">8</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/izdeliya/nestandartnoe</td><td>Нестандартное оборудование по чертежам</td><td class="num">8</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/materialy/nerzhavejka</td><td>Работа с нержавеющей сталью</td><td class="num">9</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/remont-oborudovaniya</td><td>Ремонт и модернизация оборудования</td><td class="num">9</td><td><span class="chip w2">2</span></td></tr>
+          <tr><td class="pg">/uslugi/svarochnye-raboty</td><td>Сварочные работы по чертежам</td><td class="num">7</td><td><span class="chip w3">3</span></td></tr>
+          <tr><td class="pg">/uslugi/naplavka <span class="chip hi">проверить</span></td><td>Наплавка и восстановление деталей</td><td class="num">9</td><td><span class="chip w3">3</span></td></tr>
+          <tr><td class="pg">/uslugi/proektirovanie <span class="chip hi">проверить</span></td><td>Разработка чертежей по эскизу и образцу</td><td class="num">9</td><td><span class="chip w3">3</span></td></tr>
+          <tr><td class="pg">/izdeliya/obechayki <span class="chip hi">проверить</span></td><td>Обечайки, царги и конусы</td><td class="num">6</td><td><span class="chip w3">3</span></td></tr>
+          <tr><td class="pg">/metalloobrabotka-vitebsk · -polotsk · -minsk</td><td>Металлообработка в &lt;город&gt;</td><td class="num">гео</td><td><span class="chip w3">3</span></td></tr>
+          <tr><td class="pg">/blog/*</td><td>5 статей из кластера 10</td><td class="num">10</td><td><span class="chip w3">3</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <div class="t">Про гео-страницы</div>
+      <p>Максимум 3–4 штуки и только с уникальным содержанием: логистика и сроки доставки в этот город, местные кейсы, расстояние от площадки. Шаблонные «услуга × 20 городов» — это дорвеи: ловят фильтры и обнуляют доверие ко всему домену.</p>
+    </div>
+  </section>
+
+  <section id="waves">
+    <h2><span class="num">09 / ПОРЯДОК</span>Три волны</h2>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Волна</th><th>Объём</th><th>Состав</th><th>Смысл</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="q"><span class="chip w1">волна 1</span><span>ядро</span></td>
+            <td class="num">8 страниц</td>
+            <td>Механообработка-хаб, токарка, фрезеровка, валы, детали по чертежам, запчасти, термообработка, шнеки. Все — на подтверждённых данных.</td>
+            <td>Собирает спрос вокруг настоящей силы предприятия и закрывает самый маржинальный интент «встала линия, нужна деталь».</td>
+          </tr>
+          <tr>
+            <td class="q"><span class="chip w2">волна 2</span><span>обеспечение</span></td>
+            <td class="num">11 страниц</td>
+            <td>Раскрой, гибка, вальцовка, сварка, металлоконструкции, ёмкости, транспортёры, нестандартное оборудование, нержавейка, ремонт.</td>
+            <td>Добирает высокочастотный трафик и показывает, что деталь не поедет к субподрядчику. Работает как опора для ядра.</td>
+          </tr>
+          <tr>
+            <td class="q"><span class="chip w3">волна 3</span><span>после проверки</span></td>
+            <td class="num">6 + блог</td>
+            <td>Спорные компетенции из §10, гео-страницы, статьи, кейсы с фото и цифрами.</td>
+            <td>Пишется только по фактам, подтверждённым цехом. Часть страниц может не появиться вовсе — и это нормально.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Параллельно с волной 1 и независимо от сайта: карточки в Яндекс и Google Картах, профили на flagma.by и pulscen.by, регистрация на icetrade.by. Эти каналы дают заявки быстрее, чем индексация новых страниц.</p>
+  </section>
+
+  <section id="ask">
+    <h2><span class="num">10 / ВОПРОСЫ</span>Что уточнить в цехе перед написанием</h2>
+    <p>Это блокирующий список: без ответов волна 1 напишется на общих словах вместо цифр, а волна 3 не напишется вовсе. Вопросы сгруппированы по тому, что именно они решают.</p>
+    <h3>По ядру — нужны для волны 1</h3>
+    <ul class="bul">
+      <li>Расшифровка габаритов: 1200×600×140 — это ход фрезерного станка по осям? 450×300 — второй фрезерный или расточной? 300×2000 — диаметр над станиной и РМЦ токарного?</li>
+      <li>Модели станков и наличие ЧПУ. Запрос «токарные работы ЧПУ» и «фрезеровка ЧПУ» — отдельный частотный подкластер, но заявлять ЧПУ без него нельзя.</li>
+      <li>Точность 0,01 мм — на какой операции и на каком станке достигается? Это про допуск или про шероховатость?</li>
+      <li>Есть ли шлифовка. Без неё после закалки деталь не доводится до 0,01 мм, и связку «выточим и закалим» придётся описывать иначе.</li>
+      <li>Максимальный вес детали, который принимает цех, и есть ли кран или тельфер. Для запросов про крупные детали это решающий параметр.</li>
+      <li>Какие марки стали реально идут в работу и какие — в закалку. Что не берёте принципиально.</li>
+      <li>Реальный срок: единичная деталь по готовому чертежу — от сдачи чертежа до отгрузки. И срок ответа на заявку с расчётом.</li>
+      <li>Минимальный заказ: берёте ли одну деталь и есть ли минимальная сумма.</li>
+    </ul>
+    <h3>По спорным компетенциям — решают судьбу страниц волны 3</h3>
+    <ul class="bul">
+      <li>Наплавка: есть ли оборудование и практика восстановления валов и посадочных мест?</li>
+      <li>Конструкторская документация: кто и на чём делает чертежи, есть ли конструктор в штате? От этого зависит, можно ли обещать «работаем без чертежа» — сейчас это обещание ничем не подкреплено.</li>
+      <li>Гильотина: есть ли своя, или рубка отдаётся?</li>
+      <li>Монтаж на объекте и пусконаладка: делали реально, есть ли бригада и допуски?</li>
+      <li>Обечайки, царги, конусы, бункеры и воронки: были такие заказы или это домыслы генератора? Вальцовка до 20 мм физически позволяет, но опыт и фото нужны.</li>
+      <li>Материал: закупаете сами, работаете с давальческим, или и то и другое?</li>
+      <li>Что из сгенерированного списка изделий вы на самом деле никогда не делали — это важнее, чем что делали.</li>
+    </ul>
+    <h3>Для доверия — нужны в любом случае</h3>
+    <ul class="bul">
+      <li>Сертификаты и свидетельства по сварке: точные названия и на что распространяются — под скан на страницу.</li>
+      <li>5–10 фотографий: станки в работе, готовые детали, сложные позиции, площадка. Это часть SEO-работы, а не оформление.</li>
+      <li>3–5 кейсов в формате «что было, что сделали, срок»: отрасль заказчика можно не называть.</li>
+      <li>УНП и полные реквизиты для страницы контактов — нужны и для микроразметки, и для тендерной проверки.</li>
+    </ul>
+  </section>
+
+  <section id="verify">
+    <h2><span class="num">11 / ПРОВЕРКА</span>Что снять в Wordstat и Keyword Planner</h2>
+    <p>Тиры в §05 задают порядок работ, но перед платной рекламой нужны точные цифры. Учтите долю площадок: в Беларуси основной поиск — Google, Яндекс существенно меньше, поэтому Wordstat даёт скорее структуру запросов, чем реальный объём. Снимайте обе системы, регион — Беларусь и отдельно Минск.</p>
+    <ul class="bul">
+      <li><strong>Приоритет 1, ядро:</strong> токарные работы · токарная обработка металла · фрезерные работы по металлу · токарно-фрезерные работы · механическая обработка металла · изготовление деталей по чертежам · изготовление валов · изготовление запчастей для оборудования.</li>
+      <li><strong>Приоритет 2, свободные нишы:</strong> термообработка металла · закалка деталей · изготовление шнеков · ремонт шнека · деталь по образцу · высокоточная обработка · фрезеровка шпоночных пазов.</li>
+      <li><strong>Приоритет 3, обеспечение:</strong> плазменная резка металла · лазерная резка металла · вальцовка металла · гибка металла · сварка нержавеющей стали · изготовление металлоконструкций.</li>
+      <li><strong>Гео-срез:</strong> первые четыре запроса из приоритета 1 по Минску, Витебску, Полоцку и Новополоцку — чтобы решить, сколько гео-страниц оправдано.</li>
+      <li><strong>Дополнительно:</strong> поисковые подсказки и блок «вместе с этим искали» по каждому ядру — оттуда берутся хвосты для H2.</li>
+    </ul>
+  </section>
+
+  <section id="risk">
+    <h2><span class="num">12 / РИСКИ</span>Что может сломать результат</h2>
+    <ul class="bul">
+      <li><strong>Страницы на сгенерированных компетенциях.</strong> Главный риск проекта, и он не про SEO: заявленная и несуществующая услуга приводит заявку, которую придётся отклонить. Для промышленного заказчика это конец отношений, а не просто потерянный лид. Отсюда §10 как блокирующий этап.</li>
+      <li><strong>Размытие сообщения.</strong> «Полный цикл» вместо механообработки возвращает вас в самую конкурентную и самую безликую нишу. Раскрой и сварка на сайте нужны, но как обеспечение и как отдельные входы, не как главный посыл.</li>
+      <li><strong>Тонкие страницы под каждый хвост.</strong> 25 содержательных страниц работают, 120 шаблонных — нет. Один кластер равен одной странице, хвосты живут внутри как H2 и таблицы.</li>
+      <li><strong>Страница услуги без параметров станков.</strong> В механообработке это единственное, чем вы отличаетесь от сотни таких же цехов. Таблица парка важнее любого текста о качестве и ответственности.</li>
+      <li><strong>Стоковые фото.</strong> В этом кластере заказчик оценивает уровень по виду готовой детали. Нет своих фото — нет доверия.</li>
+      <li><strong>Техническая база.</strong> Отдельные URL с уникальными Title и Description, микроразметка Organization + LocalBusiness + Service, sitemap, контакты с адресом и УНП.</li>
+      <li><strong>Юридическое, проверить отдельно.</strong> Для коммерческой деятельности юрлица в РБ есть требования к размещению сайта в национальном сегменте — домен .by и хостинг в Беларуси. Уточните у юриста до выбора хостинга под многостраничник.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>Источники выдачи, использованные при анализе</div>
+    <ul>
+      <li>Механообработка: <a href="https://tokarka-pro.by/">tokarka-pro.by</a>, <a href="https://cncmetalworking.by/">cncmetalworking.by</a>, <a href="https://mehobrabotka.by/">mehobrabotka.by</a>, <a href="https://metalworking.by/">metalworking.by</a>, <a href="https://frezertokar.by/">frezertokar.by</a>, <a href="https://promechanics.by/uslugi/tokarnaya-obrabotka/">promechanics.by</a></li>
+      <li>Запчасти и детали по чертежам: <a href="https://valimet.by/izgotovlenie-zapchastej-dlya-oborudovaniya/">valimet.by</a>, <a href="https://intateh.by/uslugi/izgotovlenie-po-chertezham">intateh.by</a>, <a href="https://kepalas.by/izgotovlenie-detalej-po-chertezham-zakazchika">kepalas.by</a>, <a href="https://ctb.by/izgotovlenie">ctb.by</a></li>
+      <li>Термообработка: <a href="https://iremtech.by/services/termicheskaya-obrabotka/">iremtech.by</a>, <a href="https://bvbalyans.by/metallMenu/181/">bvbalyans.by</a>, <a href="https://mfg.by/termoobrabotka">mfg.by</a>, <a href="https://www.moaz.by/uslugi/termicheskaya-obrabotka">moaz.by</a></li>
+      <li>Раскрой: <a href="https://znmaster.by/lazernaya-rezka-metalla">znmaster.by</a>, <a href="https://metalway.by/lazernaya-rezka-metalla-v-minske/">metalway.by</a>, <a href="https://namas-m.by/proizvodstvo/rezka">namas-m.by</a>, <a href="https://fklazerrezka.by/">fklazerrezka.by</a></li>
+      <li>Полный цикл и структура: <a href="https://pikkub.by/services/mekhanicheskaya-obrabotka/">pikkub.by</a>, <a href="https://metallstrim.by/">metallstrim.by</a>, <a href="https://aksvil.by/detali-po-chertezham/">aksvil.by</a></li>
+      <li>Шнеки: <a href="https://www.shneks.by/">shneks.by</a>, <a href="https://bvngroup.by/">bvngroup.by</a></li>
+      <li>Гео-агрегаторы: <a href="https://flagma.by/companies/uslugi-obrabotki-metalla-kompanii/novopolock/">flagma.by</a>, <a href="https://will.by/novopolock/lazer-rezka-metalla/">will.by</a>, <a href="https://novopolotsk.steelpoint.by/uslugi/uslugi-rezki">steelpoint.by</a></li>
+    </ul>
+    <div>Частотные тиры оценочные: основаны на плотности выдачи и структуре сайтов конкурентов. Точные объёмы снимаются по §11. Параметры конкурентов приведены по данным их сайтов на сентябрь 2026.</div>
+  </footer>
+
+  </main>
+</div>
+</div>

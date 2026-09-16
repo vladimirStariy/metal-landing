@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { company, nav } from "../company";
 import Icon from "./Icon";
@@ -33,7 +34,7 @@ export default function Header() {
         }`}
       >
         <div className="container-x flex h-[4.5rem] items-center justify-between gap-6">
-          <a href="#top" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+          <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
             <Logo />
             <span className="leading-tight">
               <span className="display block text-lg text-head">Велдинг Тайм</span>
@@ -41,17 +42,17 @@ export default function Header() {
                 Металлообработка
               </span>
             </span>
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-7 lg:flex">
             {nav.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className="text-sm font-medium text-body transition-colors hover:text-spark-700"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -62,12 +63,12 @@ export default function Header() {
             >
               {company.phone}
             </a>
-            <a
-              href="#request"
+            <Link
+              href="/kontakty"
               className="hidden rounded-sm bg-spark-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-spark-700 md:block"
             >
               Бесплатный расчёт
-            </a>
+            </Link>
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
@@ -100,7 +101,7 @@ export default function Header() {
           <div className="border-t border-line bg-base lg:hidden">
             <div className="container-x flex flex-col gap-1 py-4">
               {nav.map((item) => (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
@@ -108,15 +109,15 @@ export default function Header() {
                 >
                   {item.label}
                   <Icon name="arrow" className="size-4 text-spark-600" />
-                </a>
+                </Link>
               ))}
-              <a
-                href="#request"
+              <Link
+                href="/kontakty"
                 onClick={() => setOpen(false)}
                 className="mt-4 rounded-sm bg-spark-600 px-5 py-3.5 text-center font-semibold text-white"
               >
                 Бесплатный расчёт
-              </a>
+              </Link>
               <a
                 href={company.phoneHref}
                 className="py-3 text-center text-lg font-bold text-head"
