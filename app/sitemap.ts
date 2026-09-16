@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { company } from "./company";
 import { contentPages, pageHref } from "./content/pages";
+import { geoPages, geoHref } from "./content/geo";
 
 export const dynamic = "force-static";
 
@@ -18,6 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${company.site}${pageHref(page)}`,
       lastModified,
       priority: 0.8,
+    })),
+    ...geoPages.map((page) => ({
+      url: `${company.site}${geoHref(page)}`,
+      lastModified,
+      priority: 0.6,
     })),
   ];
 }

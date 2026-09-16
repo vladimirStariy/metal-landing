@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { company } from "../company";
 import { groupMeta, pagesOf, pageHref } from "../content/pages";
+import { geoNav } from "../content/navigation";
 
 export default function Footer() {
   return (
@@ -15,7 +16,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <FooterColumn
               title={groupMeta.uslugi.label}
               links={pagesOf("uslugi").map((p) => ({
@@ -30,6 +31,7 @@ export default function Footer() {
                 label: p.navLabel,
               }))}
             />
+            <FooterColumn title="География" links={geoNav} />
             <FooterColumn
               title="О производстве"
               links={[
