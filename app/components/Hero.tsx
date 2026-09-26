@@ -29,9 +29,8 @@ export default function Hero() {
             </h1>
 
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-body">
-              Точим и фрезеруем детали с точностью до 0,01 мм — включая валы
-              длиной до двух метров. Закалка, раскрой и сварка выполняются на той
-              же площадке, поэтому деталь не ездит между подрядчиками.
+              Точим и фрезеруем детали, с точностью до 0,01 мм, а также имеем возможность их закалить.
+              Раскрой, сборка и сварка происходят на одних и тех же площадях, поэтому изделие не ездит между подрядчиками.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -59,6 +58,7 @@ export default function Hero() {
                 "Точность до 0,01 мм",
                 "Закалка до 250 кг на своей площадке",
                 "Единичные детали и серии",
+                "Сборка и сварка металлоконструкций разной сложности"
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Icon name="check" className="size-4 shrink-0 text-spark-600" />
@@ -100,7 +100,7 @@ export default function Hero() {
                   href="/proizvodstvo"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-spark-700 hover:text-spark-600"
                 >
-                  Габариты по участкам
+                  Подробнее
                   <Icon name="arrow" className="size-4" />
                 </Link>
               </div>
