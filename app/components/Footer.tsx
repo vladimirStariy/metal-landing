@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="max-w-sm">
             <p className="display text-lg text-white">{company.name}</p>
             <p className="mt-3 text-sm leading-relaxed text-white/55">
-              {company.tagline}. {company.addressFull}
+              {company.tagline}. <br/> {company.addressFull}
             </p>
           </div>
 
