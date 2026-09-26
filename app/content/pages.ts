@@ -49,9 +49,9 @@ export const contentPages: ContentPage[] = [
     slug: "sborka-i-svarka-metallokonstrukcii",
     group: "uslugi",
     navLabel: "Сборка и сварка металлоконструкций",
-    navNote: "Детали весом до 250 кг, печь 2000 × 750 × 750 мм",
+    navNote: "Объем выпуска готовой продукции достигает 100 тонн ежемесячно.",
     icon: "shield",
-    h1: "Термообработка и закалка деталей весом до 250 кг",
+    h1: "Сборка и сварка металлоконструкций",
     title:
       "Термообработка и закалка деталей до 250 кг — печь 2000×750×750 мм | Велдинг Тайм",
     description:
@@ -127,7 +127,7 @@ export const contentPages: ContentPage[] = [
     slug: "lazernaya-i-plazmennaya-rezka",
     group: "uslugi",
     navLabel: "Лазерная и плазменная резка",
-    navNote: "Детали весом до 250 кг, печь 2000 × 750 × 750 мм",
+    navNote: "Режем до 20 и 60 мм. Размеры рабочих полей: 1500х6000 мм",
     icon: "shield",
     h1: "Термообработка и закалка деталей весом до 250 кг",
     title:
@@ -205,7 +205,7 @@ export const contentPages: ContentPage[] = [
     slug: "gibka-i-valcovka",
     group: "uslugi",
     navLabel: "Гибка и вальцовка",
-    navNote: "Детали весом до 250 кг, печь 2000 × 750 × 750 мм",
+    navNote: "Способны обработать изделия толщиной до 12 мм",
     icon: "shield",
     h1: "Термообработка и закалка деталей весом до 250 кг",
     title:
@@ -356,7 +356,7 @@ export const contentPages: ContentPage[] = [
     slug: "frezernye-raboty",
     group: "uslugi",
     navLabel: "Фрезерные работы",
-    navNote: "Детали до 1200 × 600 × 140 мм",
+    navNote: "Заготовки изделий до 1200 × 600 × 140 мм",
     icon: "gear",
     h1: "Фрезерные работы по металлу: детали до 1200 × 600 × 140 мм",
     title:
@@ -429,7 +429,7 @@ export const contentPages: ContentPage[] = [
     slug: "termoobrabotka",
     group: "uslugi",
     navLabel: "Термообработка",
-    navNote: "Детали весом до 250 кг, печь 2000 × 750 × 750 мм",
+    navNote: "Детали весом до 250 кг, печь размером 2000 × 750 × 750 мм",
     icon: "shield",
     h1: "Термообработка деталей весом до 250 кг",
     title:
