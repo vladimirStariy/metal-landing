@@ -25,7 +25,7 @@ export default function Hero() {
               <br />
               обработка деталей
               <br />
-              <span className="text-spark-600">и сборка металлоконструкций</span>
+              <span className="text-spark-600">и изготовление металлоконструкций</span>
             </h1>
 
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-body">
@@ -56,7 +56,8 @@ export default function Hero() {
 
             <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-body">
               {[
-                "Точность до 0,01 мм",
+                "Токарные и фрезерные работы с точностью до 0,01 мм",
+                "Гибка и вальцовка изделий толщиной до 12 мм",
                 "Закалка до 250 кг на своей площадке",
                 "Единичные детали и серии",
                 "Заготовка, сборка и сварка металлоконструкций разной сложности"
