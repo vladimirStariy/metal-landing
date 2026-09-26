@@ -54,7 +54,7 @@ export default function Hero() {
               </Link>
             </div>
 
-            <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-body">
+            <ul className="mt-9 flex flex-wrap flex-col gap-x-7 gap-y-3 text-sm font-medium text-body">
               {[
                 "Токарные и фрезерные работы с точностью до 0,01 мм",
                 "Гибка и вальцовка изделий толщиной до 12 мм",
