@@ -428,7 +428,7 @@ export const contentPages: ContentPage[] = [
   {
     slug: "sborka-i-svarka-metallokonstrukcii",
     group: "uslugi",
-    navLabel: "Гибка и вальцовка",
+    navLabel: "Сборка и сварка металлоконструкций",
     navNote: "Детали весом до 250 кг, печь 2000 × 750 × 750 мм",
     icon: "shield",
     h1: "Термообработка и закалка деталей весом до 250 кг",

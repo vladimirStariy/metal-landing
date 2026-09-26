@@ -40,7 +40,7 @@ export default function Page() {
                   <Icon name={a.icon} className="size-6" />
                 </span>
                 <h3 className="display text-xl text-head">{a.title}</h3>
-                <p className="mt-3 leading-relaxed text-body">{a.text}</p>
+                <p dangerouslySetInnerHTML={{ __html: a.text }} className="mt-3 leading-relaxed text-body" />
               </div>
             ))}
           </div>
