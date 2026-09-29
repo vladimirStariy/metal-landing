@@ -75,7 +75,10 @@ export default function ServicePage({ page }: { page: ContentPage }) {
         </section>
 
         {/* ── Что делаем ────────────────────────────────── */}
-        <Block eyebrow="Состав работ" title="Что делаем на этой услуге">
+        <Block
+          eyebrow="Состав работ"
+          title={page.group === "uslugi" ? "Что входит в услугу" : "Что мы изготавливаем"}
+        >
           <div className="grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {page.works.map((w) => (
               <div key={w.title} className="bg-base p-7 transition-colors hover:bg-spark-50/60">
@@ -91,7 +94,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
           <Block
             eyebrow="Номенклатура"
             title={page.items.caption}
-            text="Список не закрытый: если нужной позиции здесь нет, опишите задачу — скажем сразу, берём или нет."
+            text="Список не исчерпывающий. Если нужной позиции здесь нет, опишите задачу — честно скажем, беремся ли мы за неё."
             surface
           >
             <DataTable head={page.items.head} rows={page.items.rows} />
@@ -103,7 +106,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
           <Block
             eyebrow="Производство"
             title="Габариты обработки"
-            text="Габариты — главный критерий, по которому стоит проверять подрядчика. Если ваша деталь выходит за эти пределы, напишите: часть задач решается разбивкой конструкции на составные части со сваркой."
+            text="Прежде чем отправлять заказ, сверьте размеры детали с возможностями наших участков. Если деталь выходит за эти пределы, напишите нам: иногда задачу удаётся решить, разбив конструкцию на части и соединив их сваркой."
             surface={!page.items}
           >
             <DataTable head={park.head} rows={park.rows} />
@@ -126,9 +129,9 @@ export default function ServicePage({ page }: { page: ContentPage }) {
               ))}
             </div>
             <p className="mt-6 max-w-2xl text-sm text-soft">
-              Марку стали указывайте в заявке: от неё зависят режим обработки,
-              возможность закалки и стоимость. Если марка не определена — опишите
-              условия работы детали, подберём вариант при расчёте.
+              Укажите марку стали в заявке: от неё зависят режим обработки,
+              возможность закалки и стоимость. Если марка неизвестна, опишите
+              условия работы детали — вместе подберём подходящий вариант.
             </p>
           </Block>
         )}
@@ -154,7 +157,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
         <Block
           eyebrow="Расчёт"
           title="Как считается стоимость"
-          text="Цена в металлообработке всегда индивидуальна: она складывается из трудоёмкости, материала и требований чертежа. Поэтому мы не публикуем прайс, а считаем по вашей позиции."
+          text="Стоимость зависит от трудоёмкости, материала и требований чертежа, поэтому фиксированного прайса у нас нет: каждую позицию мы считаем отдельно."
         >
           <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {pricing.map((step, i) => (
@@ -213,7 +216,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
               вернём <span className="text-spark-600">цену и срок</span>
             </>
           }
-          text="Расчёт бесплатный. Достаточно чертежа, скана или фотографии с размерами. Чертежи и фото деталей присылайте на почту — так расчёт начнётся быстрее."
+          text="Расчёт бесплатный. Достаточно чертежа, скана или фотографии с размерами. Лучше присылать их на почту — так мы начнём считать быстрее."
           defaultTopic={page.navLabel}
         />
       </main>
