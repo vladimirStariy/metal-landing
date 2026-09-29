@@ -23,6 +23,55 @@ const paths: Record<string, React.ReactNode> = {
       <path d="M7 19l1.5-3M17 19l-1.5-3" />
     </>
   ),
+  // Фрезерование: концевая фреза над заготовкой
+  mill: (
+    <>
+      <rect x="8" y="2" width="8" height="3.5" rx="1" />
+      <path d="M10 5.5v10h4v-10" />
+      <path d="M10 9l4-2M10 12.5l4-2M10 15.5l4-2" />
+      <path d="M2.5 21v-4.5H8v2h8v-2h5.5V21z" />
+    </>
+  ),
+  // Термообработка: печь с пламенем
+  heat: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="1.5" />
+      <path d="M3 7.5h18" />
+      <path d="M6 5.25h1M9 5.25h1" />
+      <path d="M12 10c.6 1.8 3 2.8 3 5.2a3 3 0 0 1-6 0c0-1.2.6-2 1.2-2.5.2.9.6 1.4 1.2 1.7.2-1.4-.1-2.6.6-4.4z" />
+    </>
+  ),
+  // Фланец
+  flange: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3.5" />
+      <circle cx="12" cy="5.75" r="1" />
+      <circle cx="18.25" cy="12" r="1" />
+      <circle cx="12" cy="18.25" r="1" />
+      <circle cx="5.75" cy="12" r="1" />
+    </>
+  ),
+  // Шнек: витки на валу
+  auger: (
+    <>
+      <path d="M2 12h20M2 10v4M22 10v4" />
+      <ellipse cx="6.5" cy="12" rx="1.8" ry="6" transform="rotate(22 6.5 12)" />
+      <ellipse cx="12" cy="12" rx="1.8" ry="6" transform="rotate(22 12 12)" />
+      <ellipse cx="17.5" cy="12" rx="1.8" ry="6" transform="rotate(22 17.5 12)" />
+    </>
+  ),
+  // Транспортёр — нестандартное оборудование
+  conveyor: (
+    <>
+      <rect x="2" y="13" width="20" height="5" rx="2.5" />
+      <circle cx="4.5" cy="15.5" r="1" />
+      <circle cx="12" cy="15.5" r="1" />
+      <circle cx="19.5" cy="15.5" r="1" />
+      <rect x="8" y="6.5" width="7" height="6.5" rx="0.5" />
+      <path d="M5 18v3M19 18v3" />
+    </>
+  ),
   // Гибка листа
   bend: (
     <>
