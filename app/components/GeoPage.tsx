@@ -10,10 +10,10 @@ import { contentPages, groupMeta, pageHref } from "../content/pages";
 import { geoHref, geoPages, type GeoPage as GeoPageData } from "../content/geo";
 
 const specs = [
-  { label: "Точность обработки", value: "до 0,01 мм" },
-  { label: "Токарный участок", value: "Ø 300 × 2000 мм" },
-  { label: "Фрезерный участок", value: "1200 × 600 × 140 мм" },
-  { label: "Закалка", value: "до 250 кг" },
+  { label: "Токарно-фрезерная обработка", value: "до 0,01 мм" },
+  { label: "Металлоконструкции", value: "до 100 т в месяц" },
+  { label: "Лазерная и плазменная резка", value: "до 20 и 60 мм" },
+  { label: "Термообработка", value: "до 250 кг" },
 ];
 
 export default function GeoPage({ page }: { page: GeoPageData }) {
@@ -196,7 +196,7 @@ function jsonLd(page: GeoPageData) {
       name: `Металлообработка в ${page.city.in}`,
       description: page.description,
       url,
-      serviceType: "Механическая обработка металла",
+      serviceType: "Механическая обработка деталей и изготовление металлоконструкций",
       areaServed: { "@type": "City", name: page.city.nom },
       provider: {
         "@type": "LocalBusiness",
