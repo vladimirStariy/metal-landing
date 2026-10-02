@@ -26,7 +26,7 @@ export default function Page() {
         {/* ── Почему к нам ─────────────────────────────── */}
         <Block
           eyebrow="Почему к нам"
-          title="Что у нас стоит на площадке"
+          title="Наши возможности"
           text="Не «полный цикл» в общих словах, а конкретные участки и цифры, которые можно проверить до заказа."
           surface
         >
@@ -40,7 +40,7 @@ export default function Page() {
                   <Icon name={a.icon} className="size-6" />
                 </span>
                 <h3 className="display text-xl text-head">{a.title}</h3>
-                <p className="mt-3 leading-relaxed text-body">{a.text}</p>
+                <p dangerouslySetInnerHTML={{ __html: a.text }} className="mt-3 leading-relaxed text-body" />
               </div>
             ))}
           </div>
@@ -84,35 +84,11 @@ export default function Page() {
           <div className="mt-8 flex flex-wrap gap-3">
             <SecondaryLink href="/uslugi">Все услуги</SecondaryLink>
             <SecondaryLink href="/izdeliya">Что изготавливаем</SecondaryLink>
-          </div>
-        </Block>
-
-        {/* ── Производство ─────────────────────────────── */}
-        <Block
-          eyebrow="Производство"
-          title="Габариты, по которым стоит проверять подрядчика"
-          text="Шесть участков в Новополоцке: токарный, фрезерный, термический, раскрой, гибка и сварка. Полная таблица габаритов и материалы — на странице производства."
-          surface
-        >
-          <div className="overflow-hidden rounded-md border border-line bg-base">
-            <div className="hazard h-2" />
-            <dl className="grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
-              {keyNumbers.map((n) => (
-                <div key={n.label} className="bg-base p-6">
-                  <dt className="text-sm text-body">{n.label}</dt>
-                  <dd className="display mt-2 text-2xl normal-case text-spark-600">
-                    {n.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <SecondaryLink href="/proizvodstvo">Производственные возможности</SecondaryLink>
             <SecondaryLink href="/kak-rabotaem">Как проходит заказ</SecondaryLink>
           </div>
         </Block>
 
+               
         {/* ── CTA-полоса ───────────────────────────────── */}
         <section className="py-16 md:py-20">
           <div className="container-x">

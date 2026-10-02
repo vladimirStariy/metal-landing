@@ -116,21 +116,6 @@ export default function RequestForm({
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-body">
-                Что нужно сделать
-              </span>
-              <select name="topic" defaultValue={defaultTopic} className={fieldClass}>
-                <option value="">Выберите направление</option>
-                {contentPages.map((p) => (
-                  <option key={`${p.group}/${p.slug}`} value={p.navLabel}>
-                    {p.navLabel}
-                  </option>
-                ))}
-                <option value="Другое">Другое</option>
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-body">
                 Описание задачи
               </span>
               <textarea

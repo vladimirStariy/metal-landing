@@ -23,15 +23,16 @@ export default function Hero() {
             <h1 className="display text-[clamp(1.9rem,7.2vw,3.65rem)] break-words text-head">
               Механическая
               <br />
-              обработка металла
+              обработка деталей
               <br />
-              <span className="text-spark-600">по вашим чертежам</span>
+              <span className="text-spark-600">и изготовление металлоконструкций</span>
             </h1>
 
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-body">
-              Точим и фрезеруем детали с точностью до 0,01 мм — включая валы
-              длиной до двух метров. Закалка, раскрой и сварка выполняются на той
-              же площадке, поэтому деталь не ездит между подрядчиками.
+              Точим и фрезеруем детали, с точностью до 0,01 мм, а также имеем возможность провести их термообработку.
+              <br/>
+              <br />
+              Заготовка, сборка и сварка металлоконструкций происходят на одних и тех же площадях, поэтому изделия не ездят между подрядчиками.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -54,11 +55,14 @@ export default function Hero() {
               </Link>
             </div>
 
-            <ul className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-body">
+            <ul className="mt-9 flex flex-wrap flex-col gap-x-7 gap-y-3 text-sm font-medium text-body">
               {[
-                "Точность до 0,01 мм",
+                "Токарные и фрезерные работы с точностью до 0,01 мм",
+                "Гибка и вальцовка изделий толщиной до 12 мм",
                 "Закалка до 250 кг на своей площадке",
                 "Единичные детали и серии",
+                "Металлоконструкции разной сложности",
+                "Ремонт и производство нестандартного оборудования"
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Icon name="check" className="size-4 shrink-0 text-spark-600" />
@@ -100,7 +104,7 @@ export default function Hero() {
                   href="/proizvodstvo"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-spark-700 hover:text-spark-600"
                 >
-                  Габариты по участкам
+                  Подробнее
                   <Icon name="arrow" className="size-4" />
                 </Link>
               </div>

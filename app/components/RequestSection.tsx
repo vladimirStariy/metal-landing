@@ -39,7 +39,7 @@ export default function RequestSection({
                 icon="mail"
                 label="Электронная почта"
                 value={company.email}
-                note="Чертежи, эскизы, фотографии деталей"
+                note=""
                 href={company.emailHref}
               />
               <ContactRow

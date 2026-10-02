@@ -109,12 +109,20 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <a
-              href={company.phoneHref}
+            <div className="flex flex-col items-center">
+              <a
+                href={company.phoneHref}
+                className="hidden text-sm font-bold whitespace-nowrap text-head transition-colors hover:text-spark-700 sm:block"
+              >
+                {company.phone}
+              </a>
+              <a
+              href={company.emailHref}
               className="hidden text-sm font-bold whitespace-nowrap text-head transition-colors hover:text-spark-700 sm:block"
             >
-              {company.phone}
+              {company.email}
             </a>
+            </div>
             <Link
               href="/kontakty"
               onClick={closeAll}
@@ -219,13 +227,21 @@ export default function Header() {
               >
                 Бесплатный расчёт
               </Link>
-              <a
-                href={company.phoneHref}
-                onClick={closeAll}
-                className="py-3 text-center text-lg font-bold text-head"
-              >
-                {company.phone}
-              </a>
+              <div className="flex flex-col">
+                <a
+                  href={company.phoneHref}
+                  onClick={closeAll}
+                  className="py-3 text-center text-lg font-bold text-head"
+                >
+                  {company.phone}
+                </a>
+                <a
+                  href={company.emailHref}
+                  className="py-3 text-center text-lg font-bold text-head"
+                >
+                  {company.email}
+                </a>
+              </div>
             </div>
           </div>
         )}
