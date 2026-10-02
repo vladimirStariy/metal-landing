@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { company } from "./company";
 import { Block } from "./components/Block";
+import Certificates from "./components/Certificates";
 import Gallery from "./components/Gallery";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -101,6 +102,15 @@ export default function Page() {
           <div className="mt-8">
             <SecondaryLink href="/proizvodstvo">Посмотреть производство</SecondaryLink>
           </div>
+        </Block>
+
+        {/* ── Сертификация ─────────────────────────────── */}
+        <Block
+          eyebrow="Сертификация"
+          title="Сертификаты и свидетельства"
+          text="Сварочное производство оценено на соответствие СТБ 2349-2013, а стальные сварные конструкции, лестницы и ограждения сертифицированы по ТР 2025/013/BY. Нажмите на документ, чтобы открыть скан целиком."
+        >
+          <Certificates />
         </Block>
 
         {/* ── CTA-полоса ───────────────────────────────── */}
