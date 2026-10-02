@@ -5,7 +5,10 @@
   * для всех фото: мягкий баланс белого, авто-уровни, умеренный контраст;
   * для кадров, где главное — цех (WORKSHOP): сильнее поднимает тени,
     убирает дымку и лишний цветовой оттенок, добавляет локальную
-    резкость. Содержимое кадра не меняется — только цвет и тон.
+    резкость. Содержимое кадра не меняется — только цвет и тон;
+  * если в «фотки/ai» лежит версия кадра с обновлённым цехом (стены и
+    потолок перерисованы в Qwen-Image), берётся она и тонируется в более
+    тёмные, приглушённые «промышленные» тона (industrial).
 
 Запуск:  python3 scripts/process_photos.py
 Нужны:   pip install pillow numpy
@@ -16,6 +19,7 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 
 SRC = Path("фотки")
+AI = SRC / "ai"  # <имя для сайта>.png
 
 # Исходное имя файла -> понятное имя для сайта.
 NAMES = {
@@ -125,15 +129,64 @@ def grade(img: Image.Image, workshop: bool) -> Image.Image:
     return out.filter(ImageFilter.UnsharpMask(radius=radius, percent=percent, threshold=3))
 
 
+def industrial(img: Image.Image) -> Image.Image:
+    """Приглушает яркий «выставочный» свет ИИ-кадров: темнее, холоднее, плотнее."""
+    a = np.asarray(img.convert("RGB"), dtype=np.float32) / 255.0
+    src = a.copy()
+    # Сами светильники должны остаться светящимися — их не затемняем.
+    src_lum = (src * [0.299, 0.587, 0.114]).sum(-1, keepdims=True)
+    lamp = smoothstep(np.clip((src_lum - 0.86) / 0.11, 0, 1))
+    lamp = np.asarray(Image.fromarray((lamp[..., 0] * 255).astype(np.uint8))
+                      .filter(ImageFilter.GaussianBlur(1.5)), dtype=np.float32)[..., None] / 255.0
+
+    # Экспозиция ниже, середина и тени плотнее.
+    a = (a * 0.94) ** 1.08
+
+    # Светлые участки (лампы, белые панели) прижимаем мягким плечом.
+    lum = (a * [0.299, 0.587, 0.114]).sum(-1, keepdims=True)
+    knee = 0.66
+    over = np.clip(lum - knee, 0, None)
+    target = np.where(lum > knee, knee + over / (1 + over * 1.4), lum)
+    a = a * (target / np.maximum(lum, 1e-3))
+
+    # Цвет: меньше насыщенности, лёгкий холодный сдвиг в тенях и светах.
+    lum = (a * [0.299, 0.587, 0.114]).sum(-1, keepdims=True)
+    a = lum + (a - lum) * 0.9
+    a = a * [0.985, 0.995, 1.015]
+
+    # Лёгкая S-кривая для плотности.
+    lum = (a * [0.299, 0.587, 0.114]).sum(-1, keepdims=True)
+    s = smoothstep(np.clip(lum, 0, 1))
+    target = lum + (s - lum) * 0.18
+    a = a * (target / np.maximum(lum, 1e-3))
+
+    a = a * (1 - lamp) + src * 0.97 * lamp
+
+    # Виньетка: края кадра чуть темнее.
+    h, w = a.shape[:2]
+    y, x = np.ogrid[-1:1:h * 1j, -1:1:w * 1j]
+    a = a * (1 - 0.14 * np.clip(x * x + y * y - 0.25, 0, None))[..., None]
+
+    return Image.fromarray((np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8))
+
+
 def main() -> None:
     DST.mkdir(parents=True, exist_ok=True)
     for f in sorted(SRC.glob("*.jpg")):
-        img = ImageOps.exif_transpose(Image.open(f))
-        img.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
-        out = grade(img, f.name in WORKSHOP)
         name = NAMES[f.stem.replace(" ", "")]
+        ai = AI / f"{name}.png"
+        if ai.exists():
+            out = Image.open(ai).convert("RGB")
+            out.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
+            out = industrial(out)
+            note = "ИИ"
+        else:
+            img = ImageOps.exif_transpose(Image.open(f))
+            img.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
+            out = grade(img, f.name in WORKSHOP)
+            note = "цех" if f.name in WORKSHOP else ""
         out.save(DST / f"{name}.webp", "WEBP", quality=72, method=6)
-        print(f.name, "->", f"{name}.webp", out.size, "цех" if f.name in WORKSHOP else "")
+        print(f.name, "->", f"{name}.webp", out.size, note)
 
 
 if __name__ == "__main__":
