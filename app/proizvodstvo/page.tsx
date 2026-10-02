@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { company } from "../company";
 import { Block, DataTable, PageHead, PageHeadBackdrop } from "../components/Block";
+import Certificates from "../components/Certificates";
 import Gallery from "../components/Gallery";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -125,6 +126,14 @@ export default function Page() {
             возможность закалки и стоимость. Если марка не определена — опишите
             условия работы детали, подберём вариант при расчёте.
           </p>
+        </Block>
+
+        <Block
+          eyebrow="Сертификация"
+          title="Сертификаты и свидетельства"
+          text="Сварочное производство оценено на соответствие СТБ 2349-2013, а стальные сварные конструкции, лестницы и ограждения сертифицированы по ТР 2025/013/BY. Нажмите на документ, чтобы открыть скан целиком."
+        >
+          <Certificates />
         </Block>
 
         <Block eyebrow="Подтверждение" title="Чем подкреплено качество" surface>
