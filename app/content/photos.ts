@@ -26,38 +26,38 @@ const p = (
 
 export const photos = {
   /* ── Цех ───────────────────────────────────────────────────── */
-  cehObshchiyVid: p("ceh-obshchiy-vid", 1280, 960, "workshop", "Производственный цех: сварные фермы на стендах сборки, мостовой кран под потолком"),
-  fermaNaSborke: p("ferma-na-sborke", 960, 1280, "workshop", "Сварная ферма с фланцевой пластиной на сборке в цехе"),
-  trubaNaPodvese: p("truba-na-podvese", 960, 1280, "workshop", "Тройник из трубы на подвесе под козловой кран в цехе"),
-  karkasyNaHranenii: p("karkasy-na-hranenii", 960, 1280, "workshop", "Сварные каркасы из профильной трубы на хранении в цехе"),
-  ciklonyVCehu: p("ciklony-v-cehu", 700, 1280, "workshop", "Два циклона и вентилятор на сборке в цехе"),
-  korpusNaRameVCehu: p("korpus-na-rame-v-cehu", 960, 1280, "workshop", "Корпус на сварной раме с электродвигателем в цехе"),
+  cehObshchiyVid: p("ceh-obshchiy-vid", 1184, 896, "workshop", "Производственный цех: сварные фермы на стендах сборки, мостовой кран под потолком"),
+  fermaNaSborke: p("ferma-na-sborke", 896, 1184, "workshop", "Сварная ферма с фланцевой пластиной на сборке в цехе"),
+  trubaNaPodvese: p("truba-na-podvese", 896, 1184, "workshop", "Тройник из трубы на подвесе под козловой кран в цехе"),
+  karkasyNaHranenii: p("karkasy-na-hranenii", 896, 1184, "workshop", "Сварные каркасы из профильной трубы на хранении в цехе"),
+  ciklonyVCehu: p("ciklony-v-cehu", 714, 1280, "workshop", "Два циклона и вентилятор на сборке в цехе"),
+  korpusNaRameVCehu: p("korpus-na-rame-v-cehu", 896, 1184, "workshop", "Корпус на сварной раме с электродвигателем в цехе"),
 
   /* ── Нестандартное оборудование ────────────────────────────── */
-  bunkerNaRame: p("bunker-na-rame", 960, 1280, "work", "Окрашенный стальной корпус с люком на сварной раме"),
-  emkostSPrivodami: p("emkost-s-privodami", 960, 1280, "work", "Окрашенная ёмкость с конической воронкой, приводами и выходным патрубком"),
+  bunkerNaRame: p("bunker-na-rame", 896, 1184, "work", "Окрашенный стальной корпус с люком на сварной раме"),
+  emkostSPrivodami: p("emkost-s-privodami", 896, 1184, "work", "Окрашенная ёмкость с конической воронкой, приводами и выходным патрубком"),
   emkostSPeregorodkami: p("emkost-s-peregorodkami", 1280, 960, "work", "Окрашенная ёмкость с внутренними перегородками и загрузочным лотком"),
-  agregatNaRame: p("agregat-na-rame", 960, 1280, "work", "Агрегат в окрашенном корпусе на сварной раме с приводом"),
+  agregatNaRame: p("agregat-na-rame", 896, 1184, "work", "Агрегат в окрашенном корпусе на сварной раме с приводом"),
   reduktorSShesternyami1: p("reduktor-s-shesternyami-1", 960, 1280, "work", "Корпус с двумя валами и зубчатыми колёсами, окрашенный"),
-  reduktorSShesternyami2: p("reduktor-s-shesternyami-2", 960, 1280, "work", "Корпус с валами и зубчатой передачей, вид сбоку"),
+  reduktorSShesternyami2: p("reduktor-s-shesternyami-2", 896, 1184, "work", "Корпус с валами и зубчатой передачей, вид сбоку"),
 
   /* ── Шнеки, роторы, барабаны ───────────────────────────────── */
-  lopastnoyRotor1: p("lopastnoy-rotor-1", 1280, 960, "work", "Ротор с изогнутыми лопастями на валу с посадочной шейкой, окрашен"),
+  lopastnoyRotor1: p("lopastnoy-rotor-1", 1184, 896, "work", "Ротор с изогнутыми лопастями на валу с посадочной шейкой, окрашен"),
   lopastnoyRotor2: p("lopastnoy-rotor-2", 1280, 960, "work", "Лопастной ротор на стальном валу, вид с торца"),
   lopastnoyRotor3: p("lopastnoy-rotor-3", 960, 1280, "work", "Вал с приваренными лопастями и фланцем, окрашен"),
   barabanGrebenchatyy: p("baraban-grebenchatyy", 1280, 960, "work", "Барабан с гребенчатыми элементами и подшипниковым узлом"),
   barabanGrebenchatyySverhu: p("baraban-grebenchatyy-sverhu", 1280, 960, "work", "Барабан с гребенкой, вид сверху"),
-  barabanPerforirovannyy: p("baraban-perforirovannyy", 960, 1280, "work", "Сварной барабан с перфорированной обечайкой"),
+  barabanPerforirovannyy: p("baraban-perforirovannyy", 896, 1184, "work", "Сварной барабан с перфорированной обечайкой"),
 
   /* ── Листовые детали: резка, гибка, вальцовка ──────────────── */
   listPerforirovannyy: p("list-perforirovannyy", 960, 1280, "work", "Окрашенный стальной лист с вырезанными отверстиями"),
   obechaykaPerforirovannaya: p("obechayka-perforirovannaya", 1280, 960, "work", "Вальцованная обечайка с круглыми отверстиями разного диаметра"),
-  obechayki: p("obechayki-perforirovannye-paket", 1280, 960, "work", "Пакет вальцованных перфорированных обечаек на поддоне"),
+  obechayki: p("obechayki-perforirovannye-paket", 1184, 896, "work", "Пакет вальцованных перфорированных обечаек на поддоне"),
   sektorPerforirovannyy: p("sektor-perforirovannyy", 1280, 960, "work", "Сектор вальцованной перфорированной обечайки со сварным швом"),
   kozhuhValcovannyy1: p("kozhuh-valcovannyy-1", 1280, 960, "work", "Вальцованный перфорированный кожух с рамкой из нержавеющей стали"),
   kozhuhValcovannyy2: p("kozhuh-valcovannyy-2", 1280, 960, "work", "Вальцованный перфорированный кожух с фланцем и крепёжными ушами"),
-  ugolkiGnutye1: p("ugolki-gnutye-1", 960, 1280, "work", "Партия гнутых листовых деталей с отверстиями на поддоне"),
-  ugolkiGnutye2: p("ugolki-gnutye-2", 960, 1280, "work", "Гнутые листовые детали с отверстиями, крупным планом"),
+  ugolkiGnutye1: p("ugolki-gnutye-1", 896, 1184, "work", "Партия гнутых листовых деталей с отверстиями на поддоне"),
+  ugolkiGnutye2: p("ugolki-gnutye-2", 896, 1184, "work", "Гнутые листовые детали с отверстиями, крупным планом"),
   rychagiIzLista1: p("rychagi-iz-lista-1", 1280, 960, "work", "Плоские детали сложного контура с вырезами и приваренными скобами"),
   rychagiIzLista2: p("rychagi-iz-lista-2", 1280, 960, "work", "Детали сложного контура из листа с приваренными ручками"),
   nerzhLotki1: p("nerzhaveyushchie-lotki-1", 960, 1280, "work", "Узлы из нержавеющей стали с изогнутыми лотками на перфорированном листе"),
@@ -65,16 +65,16 @@ export const photos = {
   reshetkaOgrazhdenie: p("reshetka-ograzhdenie", 960, 1280, "work", "Сварная решётка из прутков в раме"),
 
   /* ── Токарные и фрезерные детали ───────────────────────────── */
-  valySRezboy: p("valy-s-rezboy", 720, 1280, "work", "Три стальных вала с проточками и внутренней резьбой"),
+  valySRezboy: p("valy-s-rezboy", 714, 1280, "work", "Три стальных вала с проточками и внутренней резьбой"),
   katkiNaValah1: p("katki-na-valah-1", 1280, 960, "work", "Два стальных катка на валах в сварных опорах"),
   katkiNaValah2: p("katki-na-valah-2", 1280, 960, "work", "Катки на валах с подшипниковыми опорами, вид сверху"),
   katkiNaValah3: p("katki-na-valah-3", 1280, 960, "work", "Катки на ступенчатых валах в опорах"),
-  vtulkiAlyuminievye1: p("vtulki-alyuminievye-1", 1280, 960, "work", "Алюминиевые втулки-стаканы с внутренним бортиком"),
-  vtulkiAlyuminievye2: p("vtulki-alyuminievye-2", 1280, 960, "work", "Алюминиевые втулки-стаканы"),
+  vtulkiAlyuminievye1: p("vtulki-alyuminievye-1", 1184, 896, "work", "Алюминиевые втулки-стаканы с внутренним бортиком"),
+  vtulkiAlyuminievye2: p("vtulki-alyuminievye-2", 1184, 896, "work", "Алюминиевые втулки-стаканы"),
   kolpaki1: p("kolpaki-nerzhaveyushchie-1", 960, 1280, "work", "Нержавеющие колпаки с фланцем на поддоне"),
-  kolpaki2: p("kolpaki-nerzhaveyushchie-2", 960, 1280, "work", "Партия нержавеющих колпаков на поддоне"),
+  kolpaki2: p("kolpaki-nerzhaveyushchie-2", 896, 1184, "work", "Партия нержавеющих колпаков на поддоне"),
   plity1: p("plity-s-otverstiyami-1", 1280, 960, "work", "Толстые стальные плиты с рядами отверстий на поддоне"),
-  plity2: p("plity-s-otverstiyami-2", 960, 1280, "work", "Стальные плиты с отверстиями, вид сверху"),
+  plity2: p("plity-s-otverstiyami-2", 896, 1184, "work", "Стальные плиты с отверстиями, вид сверху"),
 
   /* ── Ремкомплекты, фланцы, крепёж ──────────────────────────── */
   flancyKomplekt1: p("flancy-i-kolca-komplekt-1", 1280, 960, "work", "Комплект деталей: фланец, кольца, прокладки и втулка"),
