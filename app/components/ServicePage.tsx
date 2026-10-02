@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { company } from "../company";
+import { galleryByPage } from "../content/photos";
 import { park, pricing, stock } from "../content/production";
 import { findByKey, groupMeta, pageHref, type ContentPage } from "../content/pages";
 import { Block, DataTable, FaqList, PageHead, PageHeadBackdrop } from "./Block";
+import Gallery from "./Gallery";
 import Footer from "./Footer";
 import Header from "./Header";
 import Icon from "./Icon";
@@ -10,6 +12,7 @@ import RequestSection from "./RequestSection";
 
 export default function ServicePage({ page }: { page: ContentPage }) {
   const group = groupMeta[page.group];
+  const photos = galleryByPage[pageHref(page).slice(1)] ?? [];
   const related = page.related
     .map(findByKey)
     .filter((p): p is ContentPage => Boolean(p));
@@ -88,6 +91,17 @@ export default function ServicePage({ page }: { page: ContentPage }) {
             ))}
           </div>
         </Block>
+
+        {/* ── Фото работ ────────────────────────────────── */}
+        {photos.length > 0 && (
+          <Block
+            eyebrow="Фото"
+            title="Примеры наших работ"
+            text="Снимки изделий, изготовленных на нашей площадке в Новополоцке."
+          >
+            <Gallery photos={photos} />
+          </Block>
+        )}
 
         {/* ── Типовые позиции ───────────────────────────── */}
         {page.items && (

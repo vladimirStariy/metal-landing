@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { galleryByGroup } from "../content/photos";
 import { park } from "../content/production";
 import { groupMeta, pagesOf, pageHref, type PageGroup } from "../content/pages";
 import { Block, DataTable, PageHead, PageHeadBackdrop } from "./Block";
+import Gallery from "./Gallery";
 import Footer from "./Footer";
 import Header from "./Header";
 import Icon from "./Icon";
@@ -43,6 +45,10 @@ export default function GroupPage({ group }: { group: PageGroup }) {
             </div>
           </div>
         </section>
+
+        <Block eyebrow="Фото" title="Примеры наших работ">
+          <Gallery photos={galleryByGroup[group]} />
+        </Block>
 
         <Block
           eyebrow="Производство"

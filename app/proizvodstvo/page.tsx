@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { company } from "../company";
 import { Block, DataTable, PageHead, PageHeadBackdrop } from "../components/Block";
+import Gallery from "../components/Gallery";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
 import RequestSection from "../components/RequestSection";
+import { workshopPhotos } from "../content/photos";
 import { park, stock } from "../content/production";
 import { documents } from "../content/site";
 import { contentPages, pageHref } from "../content/pages";
@@ -87,6 +89,14 @@ export default function Page() {
             </div>
           </div>
         </section>
+
+        <Block
+          eyebrow="Площадка"
+          title="Цех изнутри"
+          text="Сборочно-сварочный цех и участки в Новополоцке: изделия проходят заготовку, обработку, сборку и сварку на одной территории."
+        >
+          <Gallery photos={workshopPhotos} />
+        </Block>
 
         <Block
           eyebrow="Габариты"
