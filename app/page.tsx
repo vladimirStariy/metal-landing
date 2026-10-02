@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { company } from "./company";
 import { Block } from "./components/Block";
+import Gallery from "./components/Gallery";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Icon from "./components/Icon";
 import RequestSection from "./components/RequestSection";
 import { contentPages, groupMeta, pageHref } from "./content/pages";
+import { showcasePhotos, workshopPhotos } from "./content/photos";
 import { advantages } from "./content/site";
 
 const keyNumbers = [
@@ -88,7 +90,19 @@ export default function Page() {
           </div>
         </Block>
 
-               
+        {/* ── Фото ─────────────────────────────────────── */}
+        <Block
+          eyebrow="Наши работы"
+          title="Что уже изготовлено"
+          text="Снимки с нашей площадки: оборудование, детали из листа и механообработки, ремонтные комплекты."
+          surface
+        >
+          <Gallery photos={showcasePhotos} />
+          <div className="mt-8">
+            <SecondaryLink href="/proizvodstvo">Посмотреть производство</SecondaryLink>
+          </div>
+        </Block>
+
         {/* ── CTA-полоса ───────────────────────────────── */}
         <section className="py-16 md:py-20">
           <div className="container-x">
