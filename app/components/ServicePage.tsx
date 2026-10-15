@@ -10,6 +10,15 @@ import Header from "./Header";
 import Icon from "./Icon";
 import RequestSection from "./RequestSection";
 
+// Колонки блока цифр — по числу пунктов, чтобы в ряду не оставалось пустых ячеек
+const specCols: Record<number, string> = {
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-3",
+  4: "sm:grid-cols-2 lg:grid-cols-4",
+  // пятый пункт на планшете растягивается на всю строку
+  5: "sm:grid-cols-2 lg:grid-cols-5 sm:[&>*:last-child]:col-span-2 lg:[&>*:last-child]:col-span-1",
+};
+
 export default function ServicePage({ page }: { page: ContentPage }) {
   const group = groupMeta[page.group];
   const photos = galleryByPage[pageHref(page).slice(1)] ?? [];
@@ -62,7 +71,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
             {/* Цифры */}
             <div className="mt-14 overflow-hidden rounded-md border border-line bg-base">
               <div className="hazard h-2" />
-              <dl className="grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
+              <dl className={`grid gap-px bg-line ${specCols[page.specs.length] ?? specCols[4]}`}>
                 {page.specs.map((s) => (
                   <div key={s.label} className="bg-base p-6">
                     <dt className="text-sm text-body">{s.label}</dt>
@@ -82,7 +91,7 @@ export default function ServicePage({ page }: { page: ContentPage }) {
           eyebrow="Состав работ"
           title={page.group === "uslugi" ? "Что входит в услугу" : "Что мы изготавливаем"}
         >
-          <div className="grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+          <div className={`grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 ${page.works.length % 3 === 0 ? "lg:grid-cols-3" : ""}`}>
             {page.works.map((w) => (
               <div key={w.title} className="bg-base p-7 transition-colors hover:bg-spark-50/60">
                 <h3 className="display text-lg text-head">{w.title}</h3>

@@ -10,7 +10,7 @@ import { contentPages, groupMeta, pageHref } from "../content/pages";
 import { geoHref, geoPages, type GeoPage as GeoPageData } from "../content/geo";
 
 const specs = [
-  { label: "Токарно-фрезерная обработка", value: "до 0,01 мм" },
+  { label: "Токарно-фрезерная обработка", value: "до 0,001 мм" },
   { label: "Металлоконструкции", value: "до 100 т в месяц" },
   { label: "Лазерная и плазменная резка", value: "до 20 и 60 мм" },
   { label: "Термообработка", value: "до 250 кг" },
