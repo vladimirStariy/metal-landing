@@ -13,7 +13,7 @@ import { showcasePhotos, workshopPhotos } from "./content/photos";
 import { advantages } from "./content/site";
 
 const keyNumbers = [
-  { label: "Точность обработки", value: "до 0,01 мм" },
+  { label: "Точность обработки", value: "до 0,001 мм" },
   { label: "Токарный участок", value: "Ø 300 × 2000 мм" },
   { label: "Фрезерный участок", value: "1200 × 600 × 140 мм" },
   { label: "Закалка", value: "до 250 кг" },
