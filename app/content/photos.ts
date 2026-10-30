@@ -91,7 +91,7 @@ const pick = (...keys: PhotoKey[]): Photo[] => keys.map((k) => photos[k]);
 /** Фото для страниц услуг и изделий — ключ в формате "group/slug". */
 export const galleryByPage: Record<string, Photo[]> = {
   "uslugi/sborka-i-svarka-metallokonstrukcii": pick(
-    "fermaNaSborke", "karkasyNaHranenii", "bunkerNaRame", "korpusNaRameVCehu", "reshetkaOgrazhdenie", "emkostSPeregorodkami",
+    "fermaNaSborke", "karkasyNaHranenii", "bunkerNaRame", "korpusNaRameVCehu", "reshetkaOgrazhdenie",
   ),
   "uslugi/lazernaya-i-plazmennaya-rezka": pick(
     "listPerforirovannyy", "obechaykaPerforirovannaya", "rychagiIzLista1", "rychagiIzLista2", "plity1", "obechayki",
@@ -118,18 +118,18 @@ export const galleryByPage: Record<string, Photo[]> = {
     "lopastnoyRotor1", "lopastnoyRotor2", "lopastnoyRotor3", "barabanGrebenchatyy", "barabanGrebenchatyySverhu", "barabanPerforirovannyy",
   ),
   "izdeliya/nestandartnoe-oborudovanie": pick(
-    "bunkerNaRame", "emkostSPrivodami", "emkostSPeregorodkami", "agregatNaRame", "reduktorSShesternyami1", "reduktorSShesternyami2", "ciklonyVCehu", "trubaNaPodvese",
+    "bunkerNaRame", "emkostSPrivodami", "agregatNaRame", "reduktorSShesternyami1", "reduktorSShesternyami2", "ciklonyVCehu", "trubaNaPodvese",
   ),
 };
 
 /** Интерьер цеха — для страницы «Производство» и главной. */
 export const workshopPhotos: Photo[] = pick(
-  "cehObshchiyVid", "fermaNaSborke", "trubaNaPodvese", "ciklonyVCehu", "karkasyNaHranenii", "korpusNaRameVCehu",
+  "cehObshchiyVid", "fermaNaSborke", "ciklonyVCehu", "karkasyNaHranenii",
 );
 
 /** Подборка «Наши работы» для главной и страницы «Производство». */
 export const showcasePhotos: Photo[] = pick(
-  "emkostSPrivodami", "lopastnoyRotor1", "obechayki", "agregatNaRame", "katkiNaValah1", "reduktorSShesternyami1", "kozhuhValcovannyy1", "flancyKomplekt1",
+  "lopastnoyRotor1", "obechayki", "katkiNaValah1", "reduktorSShesternyami1", "kozhuhValcovannyy1", "flancyKomplekt1",
 );
 
 /** Подборка для страниц-групп. */
