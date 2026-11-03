@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="max-w-sm">
             <p className="display text-lg text-white">{company.name}</p>
             <p className="mt-3 text-sm leading-relaxed text-white/55">
-              {company.tagline}. <br/> {company.addressFull}
+              {company.tagline}.
             </p>
           </div>
 
@@ -56,7 +56,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        <p className="mt-10 text-center text-xs leading-relaxed text-white/45">
+          УНП {company.unp}. {company.addressFull}
+        </p>
+
+        <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {company.name}. Все права защищены.
           </p>
