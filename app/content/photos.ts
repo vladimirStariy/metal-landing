@@ -168,6 +168,7 @@ export const workshopPhotos: Photo[] = pick(
 
 /** Подборка «Наши работы» для главной. */
 export const showcasePhotos: Photo[] = pick(
+  "cehObshchiyVid", "karkasKupola", "fermaNaSborke", "balkiNaObekte",
   "shnekiOkrashennye1", "obechayki", "flancyNaPoddone1", "reduktorSShesternyami1", "emkostNaOtgruzke", "shesternyaKonicheskaya",
 );
 
