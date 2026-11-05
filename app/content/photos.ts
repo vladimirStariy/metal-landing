@@ -163,7 +163,7 @@ export const galleryByPage: Record<string, Photo[]> = {
 
 /** Интерьер цеха — для страницы «Производство». */
 export const workshopPhotos: Photo[] = pick(
-  "cehObshchiyVid", "karkasKupola", "fermaNaSborke", "fermyVCehu",
+  "cehObshchiyVid", "karkasKupola", "fermaNaSborke",
 );
 
 /** Подборка «Наши работы» для главной. */
