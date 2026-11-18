@@ -6,7 +6,13 @@ export const company = {
   phoneHref: "tel:+375298117093",
   phoneRole: "",
   email: "weldingtimeby@gmail.com",
-  emailHref: "mailto:weldingtimeby@gmail.com",  address: "проезд Заводской, 6б, пом. 18",
+  emailHref: "mailto:weldingtimeby@gmail.com",
+  // FormSubmit (formsubmit.co): заявки приходят письмом на этот адрес. После
+  // подтверждения почты можно заменить адрес на присланную FormSubmit случайную
+  // строку, чтобы почта не светилась в коде. Если очистить — форма заявки
+  // открывает почтовый клиент (mailto).
+  formEndpoint: "https://formsubmit.co/ajax/weldingtimeby@gmail.com",
+  address: "проезд Заводской, 6б, пом. 18",
   city: "г. Новополоцк",
   region: "Витебская область, Беларусь",
   zip: "211446",

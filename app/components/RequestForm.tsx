@@ -1,32 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Forminit } from "forminit";
 import { company } from "../company";
 import Icon from "./Icon";
 
 const fieldClass =
   "w-full rounded-sm border border-line-strong bg-base px-4 py-3.5 text-head placeholder:text-soft outline-none transition-colors focus:border-spark-500 focus:ring-2 focus:ring-spark-100";
 
-// Forminit form: inputs are named fi-{type}-{name}. Rules: https://forminit.com/setup.md
-const FORM_ID = "s77orjj7w7j";
-// Forminit ограничивает заявку 25 МБ вместе с полями — оставляем запас.
-const MAX_FILES_BYTES = 24 * 1024 * 1024;
-// Сообщения для полей, которые проверяет Forminit. Ключи — имена полей Forminit:
-// sender.<name> для fi-sender-*, иначе {name} из fi-{type}-{name}.
-const FIELD_ERRORS: Record<string, string> = {
-  "sender.fullName":
-    "Проверьте имя: можно использовать только буквы, пробелы, дефисы, апострофы и точки.",
-};
-// Forminit называет поле с ошибкой в error.fieldName или первым словом в кавычках в error.message
-function errorText(error?: { error?: string; fieldName?: string; message?: string }) {
-  const field = error?.fieldName ?? /['"]([^'"]+)['"]/.exec(error?.message ?? "")?.[1];
-  if (field && FIELD_ERRORS[field]) return FIELD_ERRORS[field];
-  if (error?.error === "TOO_MANY_REQUESTS")
-    return "Подождите несколько секунд и попробуйте снова.";
-  return "";
-}
-const forminit = new Forminit();
+// FormSubmit принимает до 10 МБ файлов на заявку — оставляем запас на поля.
+const MAX_FILES_BYTES = 9.5 * 1024 * 1024;
 
 function formatSize(bytes: number) {
   return bytes < 1024 * 1024
@@ -40,10 +22,11 @@ export default function RequestForm({
   /** Направление, выбранное заранее — со страницы услуги или изделия. */
   defaultTopic?: string;
 }) {
-  // idle → sending → sent | error
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  // idle → sending → sent (ушло через FormSubmit) | mailed (открыт почтовый клиент) | error
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "sent" | "mailed" | "error"
+  >("idle");
   const sendingRef = useRef(false); // синхронная защита от двойной отправки
-  const [errorMessage, setErrorMessage] = useState("");
   const [mailHref, setMailHref] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const filesBytes = files.reduce((sum, f) => sum + f.size, 0);
@@ -51,16 +34,16 @@ export default function RequestForm({
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (sendingRef.current) return;
-    const fd = new FormData(e.currentTarget); // до того, как что-то станет disabled
-    const name = String(fd.get("fi-sender-fullName") ?? "").trim();
-    const phone = String(fd.get("fi-text-phone") ?? "").trim();
-    const topic = String(fd.get("fi-text-topic") ?? "").trim();
-    const task = String(fd.get("fi-text-task") ?? "").trim();
-    // Кривой апостроф (iPhone) в имени Forminit отклоняет
-    fd.set("fi-sender-fullName", name.replace(/[‘’]/g, "'"));
+    if (sendingRef.current || tooBig) return;
+    // Имена полей — подписи в письме FormSubmit
+    const data = new FormData(e.currentTarget);
+    const name = String(data.get("Имя") ?? "").trim();
+    const phone = String(data.get("Телефон") ?? "").trim();
+    const topic = String(data.get("Направление") ?? "").trim();
+    const task = String(data.get("Описание") ?? "").trim();
+    const subject = `Заявка на расчёт — ${name || "сайт"}`;
 
-    // Запасной путь при ошибке — готовое письмо (файлы к mailto не прикрепить)
+    // Письмо для почтового клиента — запасной путь (файлы к mailto не прикрепить)
     const body = [
       `Имя: ${name}`,
       `Телефон: ${phone}`,
@@ -71,49 +54,80 @@ export default function RequestForm({
     ]
       .filter(Boolean)
       .join("\n");
-    setMailHref(
-      `${company.emailHref}?subject=${encodeURIComponent(
-        `Заявка на расчёт — ${name || "сайт"}`,
-      )}&body=${encodeURIComponent(body)}`,
-    );
 
-    if (tooBig) return;
+    const href = `${company.emailHref}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    setMailHref(href);
+
+    const endpoint: string = company.formEndpoint;
+    if (!endpoint) {
+      // mailto: — внешний обработчик, а не маршрут Next.js
+      const link = document.createElement("a");
+      link.href = href;
+      link.click();
+      setStatus("mailed");
+      return;
+    }
+
+    data.set("_subject", subject);
+    data.set("_template", "table");
+    // FormSubmit документирует несколько полей-файлов, а не несколько файлов
+    // в одном поле — раскладываем каждый файл в своё поле
+    data.delete("attachment");
+    files.forEach((file, i) => data.append(`attachment${i + 1}`, file));
 
     sendingRef.current = true;
     setStatus("sending");
-    setErrorMessage("");
     try {
-      const { data, error } = await forminit.submit(FORM_ID, fd);
-      if (error || typeof data?.hashId !== "string") {
-        console.error("Forminit:", error ?? data);
-        setErrorMessage(errorText(error));
-        setStatus("error");
-        return;
-      }
-      setFiles([]);
-      setStatus("sent");
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      // FormSubmit отвечает {"success": "true"} строкой; неподтверждённая почта — "false"
+      const json = await res.json().catch(() => null);
+      const ok = res.ok && String(json?.success) === "true";
+      if (!ok) console.error("FormSubmit:", res.status, json);
+      if (ok) setFiles([]);
+      setStatus(ok ? "sent" : "error");
     } catch (err) {
-      console.error("Forminit:", err);
+      console.error("FormSubmit:", err);
       setStatus("error");
     } finally {
       sendingRef.current = false;
     }
   }
 
+  const done = status === "sent" || status === "mailed";
+
   return (
     <div className="overflow-hidden rounded-md border border-line bg-base shadow-[0_24px_60px_-32px_rgba(15,20,25,0.4)]">
       <div className="hazard h-2.5" />
       <div className="p-6 sm:p-9">
-        {status === "sent" ? (
+        {done ? (
           <div className="flex min-h-80 flex-col items-center justify-center text-center">
             <span className="grid size-16 place-items-center rounded-full bg-spark-50 text-spark-600">
               <Icon name="check" className="size-8" />
             </span>
-            <h3 className="display mt-6 text-2xl text-head">Заявка отправлена</h3>
-            <p className="mt-3 max-w-sm text-body">
-              Спасибо! Мы свяжемся с вами в рабочее время ({company.hours}).
-              Если вопрос срочный — позвоните.
-            </p>
+            {status === "sent" ? (
+              <>
+                <h3 className="display mt-6 text-2xl text-head">Заявка отправлена</h3>
+                <p className="mt-3 max-w-sm text-body">
+                  Спасибо! Мы свяжемся с вами в рабочее время ({company.hours}).
+                  Если вопрос срочный — позвоните.
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 className="display mt-6 text-2xl text-head">Заявка сформирована</h3>
+                <p className="mt-3 max-w-sm text-body">
+                  Должно открыться ваше почтовое приложение с готовым письмом — осталось
+                  нажать «Отправить». Если этого не произошло, напишите нам напрямую или
+                  позвоните.
+                </p>
+              </>
+            )}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
                 href={company.emailHref}
@@ -144,7 +158,7 @@ export default function RequestForm({
                   Ваше имя *
                 </span>
                 <input
-                  name="fi-sender-fullName"
+                  name="Имя"
                   required
                   autoComplete="name"
                   placeholder="Как к вам обращаться"
@@ -156,7 +170,7 @@ export default function RequestForm({
                   Телефон *
                 </span>
                 <input
-                  name="fi-text-phone"
+                  name="Телефон"
                   required
                   type="tel"
                   autoComplete="tel"
@@ -171,7 +185,7 @@ export default function RequestForm({
                 Описание задачи
               </span>
               <textarea
-                name="fi-text-task"
+                name="Описание"
                 rows={4}
                 placeholder="Материал, габариты, количество, сроки."
                 className={`${fieldClass} resize-y`}
@@ -189,11 +203,11 @@ export default function RequestForm({
                 <span className="text-soft">
                   {files.length
                     ? `${files.length} шт., ${formatSize(filesBytes)}`
-                    : "PDF, DWG, DXF, фото, архивы — до 24 МБ вместе"}
+                    : "PDF, DWG, DXF, фото, архивы — до 9,5 МБ вместе"}
                 </span>
                 <input
                   type="file"
-                  name="fi-file-files[]"
+                  name="attachment"
                   multiple
                   onChange={(e) => setFiles(Array.from(e.currentTarget.files ?? []))}
                   className="sr-only"
@@ -210,19 +224,19 @@ export default function RequestForm({
               )}
               {tooBig && (
                 <p className="mt-2 text-sm font-medium text-spark-700">
-                  Файлы весят {formatSize(filesBytes)} — больше 24 МБ. Уберите часть
+                  Файлы весят {formatSize(filesBytes)} — больше 9,5 МБ. Уберите часть
                   или пришлите их на {company.email}.
                 </p>
               )}
             </div>
 
             {defaultTopic && (
-              <input type="hidden" name="fi-text-topic" value={defaultTopic} />
+              <input type="hidden" name="Направление" value={defaultTopic} />
             )}
-            {/* Ловушка для ботов: Forminit отбрасывает заявки с заполненным _gotcha */}
+            {/* Ловушка для ботов: FormSubmit молча отбрасывает заявки с заполненным _honey */}
             <input
               type="text"
-              name="_gotcha"
+              name="_honey"
               tabIndex={-1}
               autoComplete="off"
               className="hidden"
@@ -234,22 +248,15 @@ export default function RequestForm({
                 role="status"
                 className="rounded-sm border border-spark-100 bg-spark-50 px-4 py-3 text-sm text-body"
               >
-                {errorMessage || (
-                  <>
-                    Не удалось отправить заявку. Попробуйте ещё раз,{" "}
-                    <a href={mailHref} className="font-semibold text-spark-700 underline">
-                      отправьте письмом
-                    </a>{" "}
-                    или позвоните{" "}
-                    <a
-                      href={company.phoneHref}
-                      className="font-semibold text-spark-700 underline"
-                    >
-                      {company.phone}
-                    </a>
-                    .
-                  </>
-                )}
+                Не удалось отправить заявку. Попробуйте ещё раз,{" "}
+                <a href={mailHref} className="font-semibold text-spark-700 underline">
+                  отправьте письмом
+                </a>{" "}
+                или позвоните{" "}
+                <a href={company.phoneHref} className="font-semibold text-spark-700 underline">
+                  {company.phone}
+                </a>
+                .
               </p>
             )}
 
