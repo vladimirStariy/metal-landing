@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { company } from "../company";
-import { contentPages } from "../content/pages";
 import Icon from "./Icon";
 
 const fieldClass =
@@ -14,15 +13,20 @@ export default function RequestForm({
   /** Направление, выбранное заранее — со страницы услуги или изделия. */
   defaultTopic?: string;
 }) {
-  const [sent, setSent] = useState(false);
+  // idle → sending → sent (ушло через Formspree) | mailed (открыт почтовый клиент) | error
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "sent" | "mailed" | "error"
+  >("idle");
+  const [mailHref, setMailHref] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const name = String(data.get("name") ?? "").trim();
     const phone = String(data.get("phone") ?? "").trim();
     const topic = String(data.get("topic") ?? "").trim();
     const task = String(data.get("task") ?? "").trim();
+    const subject = `Заявка на расчёт — ${name || "сайт"}`;
 
     const body = [
       `Имя: ${name}`,
@@ -35,33 +39,64 @@ export default function RequestForm({
       .filter(Boolean)
       .join("\n");
 
-    const href =
-      `${company.emailHref}?subject=${encodeURIComponent(
-        `Заявка на расчёт — ${name || "сайт"}`,
-      )}&body=${encodeURIComponent(body)}`;
+    const href = `${company.emailHref}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    setMailHref(href);
 
-    // mailto: — внешний обработчик, а не маршрут Next.js
-    const link = document.createElement("a");
-    link.href = href;
-    link.click();
-    setSent(true);
+    const endpoint: string = company.formEndpoint;
+    if (!endpoint) {
+      // mailto: — внешний обработчик, а не маршрут Next.js
+      const link = document.createElement("a");
+      link.href = href;
+      link.click();
+      setStatus("mailed");
+      return;
+    }
+
+    data.set("_subject", subject);
+    setStatus("sending");
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      setStatus(res.ok ? "sent" : "error");
+    } catch {
+      setStatus("error");
+    }
   }
+
+  const done = status === "sent" || status === "mailed";
 
   return (
     <div className="overflow-hidden rounded-md border border-line bg-base shadow-[0_24px_60px_-32px_rgba(15,20,25,0.4)]">
       <div className="hazard h-2.5" />
       <div className="p-6 sm:p-9">
-        {sent ? (
+        {done ? (
           <div className="flex min-h-80 flex-col items-center justify-center text-center">
             <span className="grid size-16 place-items-center rounded-full bg-spark-50 text-spark-600">
               <Icon name="check" className="size-8" />
             </span>
-            <h3 className="display mt-6 text-2xl text-head">Заявка сформирована</h3>
-            <p className="mt-3 max-w-sm text-body">
-              Должно открыться ваше почтовое приложение с готовым письмом — осталось
-              нажать «Отправить». Если этого не произошло, напишите нам напрямую или
-              позвоните.
-            </p>
+            {status === "sent" ? (
+              <>
+                <h3 className="display mt-6 text-2xl text-head">Заявка отправлена</h3>
+                <p className="mt-3 max-w-sm text-body">
+                  Спасибо! Мы свяжемся с вами в рабочее время ({company.hours}).
+                  Если вопрос срочный — позвоните.
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 className="display mt-6 text-2xl text-head">Заявка сформирована</h3>
+                <p className="mt-3 max-w-sm text-body">
+                  Должно открыться ваше почтовое приложение с готовым письмом — осталось
+                  нажать «Отправить». Если этого не произошло, напишите нам напрямую или
+                  позвоните.
+                </p>
+              </>
+            )}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
                 href={company.emailHref}
@@ -78,7 +113,7 @@ export default function RequestForm({
             </div>
             <button
               type="button"
-              onClick={() => setSent(false)}
+              onClick={() => setStatus("idle")}
               className="mt-6 text-sm text-soft underline-offset-4 hover:text-head hover:underline"
             >
               Заполнить ещё раз
@@ -126,11 +161,39 @@ export default function RequestForm({
               />
             </label>
 
+            {defaultTopic && (
+              <input type="hidden" name="topic" value={defaultTopic} />
+            )}
+            {/* Ловушка для ботов: Formspree отбрасывает заявки с заполненным _gotcha */}
+            <input
+              type="text"
+              name="_gotcha"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
+
+            {status === "error" && (
+              <p className="rounded-sm border border-spark-100 bg-spark-50 px-4 py-3 text-sm text-body">
+                Не удалось отправить заявку. Попробуйте ещё раз,{" "}
+                <a href={mailHref} className="font-semibold text-spark-700 underline">
+                  отправьте письмом
+                </a>{" "}
+                или позвоните{" "}
+                <a href={company.phoneHref} className="font-semibold text-spark-700 underline">
+                  {company.phone}
+                </a>
+                .
+              </p>
+            )}
+
             <button
               type="submit"
-              className="group mt-2 inline-flex items-center justify-center gap-2.5 rounded-sm bg-spark-600 px-7 py-4 font-semibold text-white shadow-[0_14px_34px_-16px_var(--color-spark-600)] transition-colors hover:bg-spark-700"
+              disabled={status === "sending"}
+              className="group mt-2 inline-flex items-center justify-center gap-2.5 rounded-sm bg-spark-600 px-7 py-4 font-semibold text-white shadow-[0_14px_34px_-16px_var(--color-spark-600)] transition-colors hover:bg-spark-700 disabled:cursor-wait disabled:opacity-70"
             >
-              Отправить заявку
+              {status === "sending" ? "Отправляем…" : "Отправить заявку"}
               <Icon
                 name="arrow"
                 className="size-4 transition-transform group-hover:translate-x-1"
