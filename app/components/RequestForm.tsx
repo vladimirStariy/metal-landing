@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { company } from "../company";
 import Icon from "./Icon";
 
@@ -9,6 +9,49 @@ const fieldClass =
 
 // FormSubmit принимает до 10 МБ файлов на заявку — оставляем запас на поля.
 const MAX_FILES_BYTES = 9.5 * 1024 * 1024;
+
+// Метка в адресе, по которой FormSubmit возвращает посетителя после заявки с файлами
+const SENT_PARAM = "zayavka";
+
+/**
+ * Обычная (не AJAX) отправка во временной форме: поля — скрытыми инпутами,
+ * каждый файл — в своём поле attachmentN (FormSubmit документирует несколько
+ * полей-файлов, а не несколько файлов в одном поле).
+ */
+function submitNative(action: string, data: FormData, files: File[]) {
+  const back = new URL(window.location.href);
+  back.searchParams.set(SENT_PARAM, "sent");
+  back.hash = "zayavka";
+  data.set("_next", back.toString());
+  // Без этого FormSubmit сначала показывает свою страницу с reCAPTCHA
+  data.set("_captcha", "false");
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = action;
+  form.enctype = "multipart/form-data";
+  form.acceptCharset = "UTF-8";
+  form.hidden = true;
+  for (const [key, value] of data) {
+    if (typeof value !== "string") continue;
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    form.append(input);
+  }
+  files.forEach((file, i) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.name = `attachment${i + 1}`;
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    form.append(input);
+  });
+  document.body.append(form);
+  form.submit();
+}
 
 function formatSize(bytes: number) {
   return bytes < 1024 * 1024
@@ -31,6 +74,26 @@ export default function RequestForm({
   const [files, setFiles] = useState<File[]>([]);
   const filesBytes = files.reduce((sum, f) => sum + f.size, 0);
   const tooBig = filesBytes > MAX_FILES_BYTES;
+
+  useEffect(() => {
+    // Вернулись от FormSubmit после заявки с файлами — показываем «отправлено»
+    // и убираем метку из адреса
+    const url = new URL(window.location.href);
+    if (url.searchParams.get(SENT_PARAM) === "sent") {
+      url.searchParams.delete(SENT_PARAM);
+      window.history.replaceState(null, "", url);
+      setStatus("sent"); // eslint-disable-line react-hooks/set-state-in-effect
+    }
+    // Кнопка «Назад» со страницы FormSubmit возвращает страницу из кэша
+    // в состоянии «Отправляем…» — снимаем его
+    function onPageShow(e: PageTransitionEvent) {
+      if (!e.persisted) return;
+      sendingRef.current = false;
+      setStatus((s) => (s === "sending" ? "idle" : s));
+    }
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -72,12 +135,18 @@ export default function RequestForm({
 
     data.set("_subject", subject);
     data.set("_template", "table");
-    // FormSubmit документирует несколько полей-файлов, а не несколько файлов
-    // в одном поле — раскладываем каждый файл в своё поле
     data.delete("attachment");
-    files.forEach((file, i) => data.append(`attachment${i + 1}`, file));
 
     sendingRef.current = true;
+    if (files.length) {
+      // Через AJAX FormSubmit файлы не доставляет — с файлами отправляем
+      // обычной формой (как в их документации), а FormSubmit возвращает
+      // посетителя обратно по _next
+      setStatus("sending");
+      submitNative(endpoint.replace("/ajax/", "/"), data, files);
+      return;
+    }
+
     setStatus("sending");
     try {
       const res = await fetch(endpoint, {
@@ -89,7 +158,6 @@ export default function RequestForm({
       const json = await res.json().catch(() => null);
       const ok = res.ok && String(json?.success) === "true";
       if (!ok) console.error("FormSubmit:", res.status, json);
-      if (ok) setFiles([]);
       setStatus(ok ? "sent" : "error");
     } catch (err) {
       console.error("FormSubmit:", err);
@@ -102,7 +170,9 @@ export default function RequestForm({
   const done = status === "sent" || status === "mailed";
 
   return (
-    <div className="overflow-hidden rounded-md border border-line bg-base shadow-[0_24px_60px_-32px_rgba(15,20,25,0.4)]">
+    <div
+      id="zayavka"
+      className="scroll-mt-24 overflow-hidden rounded-md border border-line bg-base shadow-[0_24px_60px_-32px_rgba(15,20,25,0.4)]">
       <div className="hazard h-2.5" />
       <div className="p-6 sm:p-9">
         {done ? (
