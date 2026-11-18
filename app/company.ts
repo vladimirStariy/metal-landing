@@ -6,11 +6,7 @@ export const company = {
   phoneHref: "tel:+375298117093",
   phoneRole: "",
   email: "weldingtimeby@gmail.com",
-  emailHref: "mailto:weldingtimeby@gmail.com",
-  // Formspree: адрес формы из кабинета formspree.io. Если очистить —
-  // форма заявки снова будет открывать почтовый клиент (mailto).
-  formEndpoint: "https://formspree.io/f/mbgoovdg",
-  address: "проезд Заводской, 6б, пом. 18",
+  emailHref: "mailto:weldingtimeby@gmail.com",  address: "проезд Заводской, 6б, пом. 18",
   city: "г. Новополоцк",
   region: "Витебская область, Беларусь",
   zip: "211446",
